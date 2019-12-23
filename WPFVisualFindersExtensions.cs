@@ -14,7 +14,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="child_name">Name of the child to find.</param>
         /// <returns>A matching child, or null if none existing.</returns>
         /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type </remarks>
-        public static T FindChild<T>(this DependencyObject startNode, string child_name = null) where T : DependencyObject
+        public static T FindChild<T>(this DependencyObject startNode, string child_name = null)
         {
             return WPFVisualFinders.FindChild<T>(startNode, child_name);
         }
@@ -30,7 +30,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="startNode">The node where to start looking from.</param>
         /// <param name="child_name">An optional name to give further filtering during search.</param>
         /// <returns>A matching child, or null if none existing in the direct path.</returns>
-        public static T FindDirectChild<T>(this DependencyObject startNode, string child_name = "") where T : DependencyObject
+        public static T FindDirectChild<T>(this DependencyObject startNode, string child_name = "")
         {
             return WPFVisualFinders.FindDirectChild<T>(startNode, child_name);
         }
@@ -42,7 +42,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="startNode">The node where to start looking from.</param>
         /// <param name="results">A list of all found children elements.</param>
         /// <remarks>From: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper</remarks>
-        public static void FindAllChildren<T>(this DependencyObject startNode, ref IList<T> results) where T : DependencyObject
+        public static void FindAllChildren<T>(this DependencyObject startNode, ref IList<T> results)
         {
             WPFVisualFinders.FindAllChildren<T>(startNode, ref results);
         }
@@ -57,7 +57,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">Optional name of the parent to find.</param>
         /// <returns>The matching parent, or null if none.</returns>
         /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent </remarks>
-        public static T FindParent<T>(this DependencyObject child, string name = null) where T : DependencyObject
+        public static T FindParent<T>(this DependencyObject child, string name = null)
         {
             return WPFVisualFinders.FindParent<T>(child, name);
         }
