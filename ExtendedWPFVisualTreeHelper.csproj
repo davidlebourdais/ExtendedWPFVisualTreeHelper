@@ -6,7 +6,7 @@
     <PackageDescription>A compilation of useful WPF visual tree helpers.</PackageDescription>
     <PackageTags>EMA;WPF;Visual Tree;VisualTreeHelper</PackageTags>
     <UseWPF>true</UseWPF>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <Authors>David Le Bourdais</Authors>
     <Copyright>Copyright © 2019-2020</Copyright>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

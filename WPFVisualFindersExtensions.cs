@@ -68,15 +68,28 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         }
 
         /// <summary>
+        /// Finds a parent that matches method type and (optionnaly) the passed name 
+        /// by also travelling the logical tree when necessary (i.e. when child is a content).
+        /// </summary>
+        /// <typeparam name="T">Type of the obect to find.</typeparam>
+        /// <param name="child">The node where to start looking from.</param>
+        /// <param name="name">Optional name of the parent to find.</param>
+        /// <returns>The matching parent, or null if none.</returns>
+        public static T FindParentExtended<T>(this DependencyObject child, string name = null)
+        {
+            return WPFVisualFinders.FindParentExtended<T>(child, name);
+        }
+
+        /// <summary>
         /// This method is an alternative to WPF's <see cref="VisualTreeHelper.GetParent"/> method, 
         /// which also supports content element navigation. Keep in mind that for content element,
         /// this method falls back to the logical tree of the element!</summary>
         /// <param name="child">The item to be processed.</param>
         /// <returns>The submitted item's parent, if available, and null otherwise.</returns>
         /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent </remarks>
-        public static DependencyObject GetParentObject(this DependencyObject child)
+        public static DependencyObject GetParentExtended(this DependencyObject child)
         {
-            return WPFVisualFinders.GetParentObject(child);
+            return WPFVisualFinders.GetParentExtended(child);
         }
         #endregion
     }

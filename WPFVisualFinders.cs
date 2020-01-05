@@ -136,14 +136,14 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// Finds a parent that matches method type and (optionnaly) the passed name.
         /// </summary>
         /// <typeparam name="T">Type of the obect to find.</typeparam>
-        /// <param name="startNode">The node where to start looking from.</param>
+        /// <param name="child">The node where to start looking from.</param>
         /// <param name="name">Optional name of the parent to find.</param>
         /// <returns>The matching parent, or null if none.</returns>
         /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent </remarks>
-        public static T FindParent<T>(DependencyObject startNode, string name = null)
+        public static T FindParent<T>(DependencyObject child, string name = null)
         {
             // Get parent:
-            var parent = VisualTreeHelper.GetParent(startNode);
+            var parent = VisualTreeHelper.GetParent(child);
             if (parent == null) return default;  // reached tree top.
 
             if (parent is T casted)
@@ -157,13 +157,37 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         }
 
         /// <summary>
+        /// Finds a parent that matches method type and (optionnaly) the passed name 
+        /// by also travelling the logical tree when necessary (i.e. when child is a content).
+        /// </summary>
+        /// <typeparam name="T">Type of the obect to find.</typeparam>
+        /// <param name="child">The node where to start looking from.</param>
+        /// <param name="name">Optional name of the parent to find.</param>
+        /// <returns>The matching parent, or null if none.</returns>
+        public static T FindParentExtended<T>(DependencyObject child, string name = null)
+        {
+            // Get parent:
+            var parent = GetParentExtended(child);
+            if (parent == null) return default;  // reached tree top.
+
+            if (parent is T casted)
+            {
+                if (!string.IsNullOrEmpty(name))  // case where search by name is enabled.
+                    return casted is FrameworkElement element && element.Name == name ? casted : FindParentExtended<T>(parent, name);
+                else return casted;  // case where no name is required: found typed parent then return result.
+            }
+            else
+                return FindParentExtended<T>(parent, name);
+        }
+
+        /// <summary>
         /// This method is an alternative to WPF's <see cref="VisualTreeHelper.GetParent"/> method, 
         /// which also supports content element navigation. Keep in mind that for content element,
         /// this method falls back to the logical tree of the element!</summary>
         /// <param name="child">The item to be processed.</param>
         /// <returns>The submitted item's parent, if available, and null otherwise.</returns>
         /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent </remarks>
-        public static DependencyObject GetParentObject(DependencyObject child)
+        public static DependencyObject GetParentExtended(DependencyObject child)
         {
             if (child == null) return null;  // tree root found.
 
