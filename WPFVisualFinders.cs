@@ -5,6 +5,10 @@ using System.Windows.Media;
 
 namespace EMA.ExtendedWPFVisualTreeHelper
 {
+    /// <summary>
+    /// Provides a set of helpers to navigate a visual tree and either find 
+    /// a specific child or parent of a dependency object.
+    /// </summary>
     public static class WPFVisualFinders
     {
         #region Find children
@@ -62,7 +66,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// Finds the first occurence of a child of a given typein descendance of 
         /// a dependency object with an optional name filtering. 
         /// Direct as it only goes through the first child of visual elements, 
-        /// contrary to <see cref="FindChild{T}(DependencyObject)"/> which looks to every children
+        /// contrary to <see cref="FindChild{T}"/> which looks to every children
         /// at every nodes to look for first matching result.
         /// </summary>
         /// <typeparam name="T">The type of the child to find.</typeparam>
@@ -127,7 +131,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         }
         #endregion
 
-        #region Helpers to find parents
+        #region Find parents
         /// <summary>
         /// Finds a parent that matches method type and (optionnaly) the passed name.
         /// </summary>

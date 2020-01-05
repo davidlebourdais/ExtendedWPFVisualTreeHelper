@@ -1,8 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Media;
 
 namespace EMA.ExtendedWPFVisualTreeHelper
 {
+    /// <summary>
+    /// Provides a set of extensions on <see cref="DependencyObject"/> to navigate a visual tree 
+    /// and either find a specific descendant or ancestor.
+    /// </summary>
     public static class WPFVisualFindersExtensions
     {
         #region Find children
@@ -23,7 +28,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// Finds the first occurence of a child of a given typein descendance of 
         /// a dependency object with an optional name filtering. 
         /// Direct as it only goes through the first child of visual elements, 
-        /// contrary to <see cref="FindChild{T}(DependencyObject)"/> which looks to every children
+        /// contrary to <see cref="FindChild{T}"/> which looks to every children
         /// at every nodes to look for first matching result.
         /// </summary>
         /// <typeparam name="T">The type of the child to find.</typeparam>
@@ -53,7 +58,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// Finds a parent that matches method type and (optionnaly) the passed name.
         /// </summary>
         /// <typeparam name="T">Type of the obect to find.</typeparam>
-        /// <param name="startNode">The node where to start looking from.</param>
+        /// <param name="child">The node where to start looking from.</param>
         /// <param name="name">Optional name of the parent to find.</param>
         /// <returns>The matching parent, or null if none.</returns>
         /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent </remarks>
