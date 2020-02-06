@@ -228,6 +228,24 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         }
 
         /// <summary>
+        /// Return a parent at a given ancestry level.
+        /// </summary>
+        /// <param name="child">The node where to start looking from.</param>
+        /// <param name="level">The ancestry level the parent is at regarding to passed child.</param>
+        /// <returns>The parent at fiven ancestry level, or null if none found at that level.</returns>
+        public static DependencyObject FindParentByLevel(DependencyObject child, int level = 1)
+        {
+            if (level < 0) return null;
+            int current_level = 0;
+            var result = child;
+
+            while (current_level++ < level || result == null)
+                result = VisualTreeHelper.GetParent(result);
+
+            return result;
+        }
+
+        /// <summary>
         /// This method is an alternative to WPF's <see cref="VisualTreeHelper.GetParent"/> method, 
         /// which also supports content element navigation. Keep in mind that for content element,
         /// this method falls back to the logical tree of the element!</summary>
