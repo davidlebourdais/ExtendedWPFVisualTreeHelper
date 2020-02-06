@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 
@@ -55,7 +56,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
 
         #region Find parent
         /// <summary>
-        /// Finds a parent that matches method type and (optionnaly) the passed name.
+        /// Finds a parent that matches static type and (optionnaly) the passed name.
         /// </summary>
         /// <typeparam name="T">Type of the obect to find.</typeparam>
         /// <param name="child">The node where to start looking from.</param>
@@ -68,7 +69,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         }
 
         /// <summary>
-        /// Finds a parent that matches method type and (optionnaly) the passed name 
+        /// Finds a parent that matches static type and (optionnaly) the passed name 
         /// by also travelling the logical tree when necessary (i.e. when child is a content).
         /// </summary>
         /// <typeparam name="T">Type of the obect to find.</typeparam>
@@ -78,6 +79,30 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         public static T FindParentExtended<T>(this DependencyObject child, string name = null)
         {
             return WPFVisualFinders.FindParentExtended<T>(child, name);
+        }
+
+        /// <summary>
+        /// Finds a parent that matches passed target (and dynamically defined) type and (optionnaly) a passed name.
+        /// </summary>
+        /// <param name="child">The node where to start looking from.</param>
+        /// <param name="targetType">The explicit type the parent should have.</param>
+        /// <param name="name">Optional name of the parent to find.</param>
+        /// <returns>The matching parent, or null if none.</returns>
+        public static DependencyObject FindParentByType(this DependencyObject child, Type targetType, string name = null)
+        {
+             return WPFVisualFinders.FindParentByType(child, targetType, name);
+        }
+
+        /// <summary>
+        /// Finds a parent that matches passed target (and dynamically defined) type and (optionnaly) a passed name.
+        /// </summary>
+        /// <param name="child">The node where to start looking from.</param>
+        /// <param name="targetType">The explicit type the parent should have.</param>
+        /// <param name="name">Optional name of the parent to find.</param>
+        /// <returns>The matching parent, or null if none.</returns>
+        public static DependencyObject FindParentByTypeExtended(DependencyObject child, Type targetType, string name = null)
+        {
+             return WPFVisualFinders.FindParentByTypeExtended(child, targetType, name);
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
@@ -133,7 +134,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
 
         #region Find parents
         /// <summary>
-        /// Finds a parent that matches method type and (optionnaly) the passed name.
+        /// Finds a parent that matches static type and (optionnaly) the passed name.
         /// </summary>
         /// <typeparam name="T">Type of the obect to find.</typeparam>
         /// <param name="child">The node where to start looking from.</param>
@@ -157,7 +158,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         }
 
         /// <summary>
-        /// Finds a parent that matches method type and (optionnaly) the passed name 
+        /// Finds a parent that matches static type and (optionnaly) the passed name 
         /// by also travelling the logical tree when necessary (i.e. when child is a content).
         /// </summary>
         /// <typeparam name="T">Type of the obect to find.</typeparam>
@@ -178,6 +179,52 @@ namespace EMA.ExtendedWPFVisualTreeHelper
             }
             else
                 return FindParentExtended<T>(parent, name);
+        }
+
+        /// <summary>
+        /// Finds a parent that matches passed target (and dynamically defined) type and (optionnaly) a passed name.
+        /// </summary>
+        /// <param name="child">The node where to start looking from.</param>
+        /// <param name="targetType">The explicit type the parent should have.</param>
+        /// <param name="name">Optional name of the parent to find.</param>
+        /// <returns>The matching parent, or null if none.</returns>
+        public static DependencyObject FindParentByType(DependencyObject child, Type targetType, string name = null)
+        {
+            // Get parent:
+            var parent = VisualTreeHelper.GetParent(child);
+            if (parent == null) return default;  // reached tree top.
+
+            if ((parent.GetType()).Equals(targetType) || (parent.GetType().GetTypeInfo().IsSubclassOf(targetType)))
+            {
+                if (!string.IsNullOrEmpty(name))  // case where search by name is enabled.
+                    return parent is FrameworkElement element && element.Name == name ? parent : FindParentByType(parent, targetType, name);
+                else return parent;  // case where no name is required: found typed parent then return result.
+            }
+            else
+                return FindParentByType(parent, targetType, name);
+        }
+
+        /// <summary>
+        /// Finds a parent that matches passed target (and dynamically defined) type and (optionnaly) a passed name.
+        /// </summary>
+        /// <param name="child">The node where to start looking from.</param>
+        /// <param name="targetType">The explicit type the parent should have.</param>
+        /// <param name="name">Optional name of the parent to find.</param>
+        /// <returns>The matching parent, or null if none.</returns>
+        public static DependencyObject FindParentByTypeExtended(DependencyObject child, Type targetType, string name = null)
+        {
+            // Get parent:
+            var parent = GetParentExtended(child);
+            if (parent == null) return default;  // reached tree top.
+
+            if ((parent.GetType()).Equals(targetType) || (parent.GetType().GetTypeInfo().IsSubclassOf(targetType)))
+            {
+                if (!string.IsNullOrEmpty(name))  // case where search by name is enabled.
+                    return parent is FrameworkElement element && element.Name == name ? parent : FindParentByTypeExtended(parent, targetType, name);
+                else return parent;  // case where no name is required: found typed parent then return result.
+            }
+            else
+                return FindParentByTypeExtended(parent, targetType, name);
         }
 
         /// <summary>
