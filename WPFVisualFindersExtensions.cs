@@ -19,7 +19,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="startNode">The node where to start looking from.</param>
         /// <param name="child_name">Name of the child to find.</param>
         /// <returns>A matching child, or null if none existing.</returns>
-        /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type </remarks>
+        /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type.</remarks>
         public static T FindChild<T>(this DependencyObject startNode, string child_name = null)
         {
             return WPFVisualFinders.FindChild<T>(startNode, child_name);
@@ -47,7 +47,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <typeparam name="T">The type of the children to find.</typeparam>
         /// <param name="startNode">The node where to start looking from.</param>
         /// <param name="results">A list of all found children elements.</param>
-        /// <remarks>From: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper</remarks>
+        /// <remarks>From: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper.</remarks>
         public static void FindAllChildren<T>(this DependencyObject startNode, ref IList<T> results)
         {
             WPFVisualFinders.FindAllChildren<T>(startNode, ref results);
@@ -62,7 +62,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="child">The node where to start looking from.</param>
         /// <param name="name">Optional name of the parent to find.</param>
         /// <returns>The matching parent, or null if none.</returns>
-        /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent </remarks>
+        /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent.</remarks>
         public static T FindParent<T>(this DependencyObject child, string name = null)
         {
             return WPFVisualFinders.FindParent<T>(child, name);
@@ -70,7 +70,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
 
         /// <summary>
         /// Finds a parent that matches static type and (optionnaly) the passed name 
-        /// by also travelling the logical tree when necessary (i.e. when child is a content).
+        /// with the ability to travel through <see cref="ContentElement"/> objects while walking up the visual tree.
         /// </summary>
         /// <typeparam name="T">Type of the obect to find.</typeparam>
         /// <param name="child">The node where to start looking from.</param>
@@ -94,13 +94,14 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         }
 
         /// <summary>
-        /// Finds a parent that matches passed target (and dynamically defined) type and (optionnaly) a passed name.
+        /// Finds a parent that matches passed target (and dynamically defined) type and (optionnaly) a passed name
+        /// with the ability to travel through <see cref="ContentElement"/> objects while walking up the visual tree.
         /// </summary>
         /// <param name="child">The node where to start looking from.</param>
         /// <param name="targetType">The explicit type the parent should have.</param>
         /// <param name="name">Optional name of the parent to find.</param>
         /// <returns>The matching parent, or null if none.</returns>
-        public static DependencyObject FindParentByTypeExtended(DependencyObject child, Type targetType, string name = null)
+        public static DependencyObject FindParentByTypeExtended(this DependencyObject child, Type targetType, string name = null)
         {
              return WPFVisualFinders.FindParentByTypeExtended(child, targetType, name);
         }
@@ -111,18 +112,18 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="child">The node where to start looking from.</param>
         /// <param name="level">The ancestry level the parent is at regarding to passed child.</param>
         /// <returns>The parent at fiven ancestry level, or null if none found at that level.</returns>
-        public static DependencyObject FindParentByLevel(DependencyObject child, int level = 1)
+        public static DependencyObject FindParentByLevel(this DependencyObject child, int level = 1)
         {
             return WPFVisualFinders.FindParentByLevel(child, level);
         }
 
         /// <summary>
-        /// This method is an alternative to WPF's <see cref="VisualTreeHelper.GetParent"/> method, 
-        /// which also supports content element navigation. Keep in mind that for content element,
-        /// this method falls back to the logical tree of the element!</summary>
+        /// Alternative to WPF's <see cref="VisualTreeHelper.GetParent"/> method, 
+        /// which also supports navigation through <see cref="ContentElement"/> objects that
+        /// are not stictly speaking in the visual tree.</summary>
         /// <param name="child">The item to be processed.</param>
-        /// <returns>The submitted item's parent, if available, and null otherwise.</returns>
-        /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent </remarks>
+        /// <returns>The submitted item's parent, if available, null otherwise.</returns>
+        /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent.</remarks>
         public static DependencyObject GetParentExtended(this DependencyObject child)
         {
             return WPFVisualFinders.GetParentExtended(child);
