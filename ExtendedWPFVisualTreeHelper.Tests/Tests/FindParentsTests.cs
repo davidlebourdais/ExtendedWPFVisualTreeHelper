@@ -241,5 +241,37 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
             WPFAppTester.RunTestInWindow(inspect, xaml);
         }
         #endregion
+
+        #region GetParentExtended
+        [Theory]
+        [ClassData(typeof(InvertedTestData))]
+        public void CanGetParentExtended(string xaml, bool related_in_path)
+        {
+            Action<FrameworkElement> inspect = (tree) => 
+            {
+                var origin = TreeHelpers.FindElementByName(tree, "Start");
+                var expected = TreeHelpers.FindElementByName(tree, "End");
+
+                // Run up until reaching top:
+                var parent = origin;
+                var found_expected = false;
+                do
+                {
+                    var current_node = parent;
+                    parent = WPFVisualFinders.GetParentExtended(current_node) as DependencyObject;
+
+                    var parent_ext = current_node.GetParentExtended() as DependencyObject;
+                    Assert.Equal(parent, parent_ext);
+
+                    if (expected.Equals(parent))
+                        found_expected = true;
+                } while (parent != null);
+
+                Assert.Equal(related_in_path, found_expected);
+            };
+
+            WPFAppTester.RunTestInWindow(inspect, xaml);
+        }
+        #endregion
     }
 }
