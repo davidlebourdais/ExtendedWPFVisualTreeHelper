@@ -37,10 +37,16 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 "</Border>" +
                 "<Grid>" +
                     "<DockPanel>" +
-                        "<TextBlock />" +
+                        "<TextBlock Name=\"Similar\" />" +
                         "<TextBlock Name=\"B\" />" +
                     "</DockPanel>" +
                     "<TextBlock />" +
+                    "<DockPanel>" +
+                        "<StackPanel>" +
+                            "<TextBlock />" +
+                            "<TextBlock />" +
+                        "</StackPanel>" +
+                    "</DockPanel>" +
                 "</Grid>" +
             "</StackPanel>",
 
