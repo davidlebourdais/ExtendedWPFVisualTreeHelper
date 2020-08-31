@@ -42,15 +42,16 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         }
 
         /// <summary>
-        /// Gets a list of all descendance of given type from a dependency object. 
+        /// Gets the filtered-by-type complete descendancy of a given dependency object. 
         /// </summary>
         /// <typeparam name="T">The type of the children to find.</typeparam>
         /// <param name="startNode">The node where to start looking from.</param>
-        /// <param name="results">A list of all found children elements.</param>
-        /// <remarks>From: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper.</remarks>
-        public static void FindAllChildren<T>(this DependencyObject startNode, ref IList<T> results)
+        /// <returns>All found children elements that match method type.</returns>
+        /// <remarks>Inspired from: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper 
+        /// and https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type.</remarks>
+        public static IEnumerable<T> FindAllChildren<T>(this DependencyObject startNode)
         {
-            WPFVisualFinders.FindAllChildren<T>(startNode, ref results);
+            return WPFVisualFinders.FindAllChildren<T>(startNode);
         }
         #endregion
 
