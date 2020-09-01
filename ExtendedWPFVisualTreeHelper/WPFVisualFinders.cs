@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace EMA.ExtendedWPFVisualTreeHelper
 {
@@ -18,10 +20,10 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <typeparam name="T">The type of the queried item.</typeparam>
         /// <param name="startNode">The node where to start looking from.</param>
-        /// <param name="child_name">Name of the child to find.</param>
+        /// <param name="name">Name of the child to find.</param>
         /// <returns>A matching child, or null if none existing.</returns>
-        /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type.</remarks>
-        public static T FindChild<T>(DependencyObject startNode, string child_name = null)
+        /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type. </remarks>
+        public static T FindChild<T>(DependencyObject startNode, string name = null)
         {
             if (startNode == null) return default;
 
@@ -34,21 +36,21 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                 if (!(child is T typedChild))
                 {
                     // Continue to explore:
-                    var foundChild = FindChild<T>(child, child_name);
+                    var foundChild = FindChild<T>(child, name);
 
                     // If the child is found, just return:
                     if (foundChild != null) return foundChild;
                 }
                 // Child of correct type, now check name if required:
-                else if (!string.IsNullOrEmpty(child_name))
+                else if (!string.IsNullOrEmpty(name))
                 {
                     // If the child's name is correct, return result:
-                    if (child is FrameworkElement frameworkElement && frameworkElement.Name == child_name)
+                    if (child is FrameworkElement frameworkElement && frameworkElement.Name == name)
                         return typedChild;
                     else
                     {
                         // Continue to explore:
-                        var foundChild = FindChild<T>(child, child_name);
+                        var foundChild = FindChild<T>(child, name);
 
                         // If the child is found, just return:
                         if (foundChild != null) return foundChild;
@@ -64,17 +66,75 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         }
 
         /// <summary>
-        /// Finds the first occurence of a child of a given typein descendance of 
-        /// a dependency object with an optional name filtering. 
-        /// Direct as it only goes through the first child of visual elements, 
-        /// contrary to <see cref="FindChild{T}"/> which looks to every children
-        /// at every nodes to look for first matching result.
+        /// Finds a child of in the visual tree using its type and (optionnaly) its name and with
+        /// the ability to travel through <see cref="ContentElement"/> objects while exploring the visual tree.
+        /// </summary>
+        /// <typeparam name="T">The type of the queried item.</typeparam>
+        /// <param name="startNode">The node where to start looking from.</param>
+        /// <param name="name">Name of the child to find.</param>
+        /// <returns>A matching child, or null if none existing.</returns>
+        /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type. </remarks>
+        public static T FindChildExtended<T>(DependencyObject startNode, string name = null)
+        {
+            if (startNode == null) return default;
+
+            if (startNode is Visual || startNode is Visual3D)
+            {
+                var childrenCount = VisualTreeHelper.GetChildrenCount(startNode);
+                for (int i = 0; i < childrenCount; i++)
+                {
+                    var child = VisualTreeHelper.GetChild(startNode, i);
+
+                    // If the child if of the requested type:
+                    if (child is T casted)
+                    {
+                        if (!string.IsNullOrEmpty(name)) // if the child's name is set for search
+                        {
+                            if (child is FrameworkElement frameworkElement && frameworkElement.Name == name)
+                                return casted;
+                        }
+                        else return casted;
+                    }
+
+                    // If here, no child found so far so keep digging:
+                    var foundChild = FindChildExtended<T>(child, name);
+                    if (foundChild != null) return foundChild;
+                }
+            }
+
+            var children = LogicalTreeHelper.GetChildren(startNode).OfType<ContentElement>();
+            foreach (var child in children)
+            {
+                // If the child if of the requested type:
+                if (child is T casted)
+                {
+                    if (!string.IsNullOrEmpty(name)) // if the child's name is set for search
+                    {
+                        if (child is FrameworkContentElement frameworkContentElement && frameworkContentElement.Name == name)
+                            return casted;
+                    }
+                    else return casted;
+                }
+
+                // If here, no child found so far so keep digging:
+                var foundChild = FindChildExtended<T>(child as DependencyObject, name);
+                if (foundChild != null) return foundChild;
+            }
+
+            return default;
+        }
+
+        /// <summary>
+        /// Finds the first occurence of a typed child in the descendancy of a <see cref="DependencyObject"/> node 
+        /// with optional name filtering.
+        /// Direct as it only goes through the first child of visual elements, contrary to <see cref="FindChild{T}"/> which looks 
+        /// searches any children of a node to find the first matching result.
         /// </summary>
         /// <typeparam name="T">The type of the child to find.</typeparam>
         /// <param name="startNode">The node where to start looking from.</param>
-        /// <param name="child_name">An optional name to give further filtering during search.</param>
+        /// <param name="name">An optional name for filtering during search.</param>
         /// <returns>A matching child, or null if none existing in the direct path.</returns>
-        public static T FindDirectChild<T>(DependencyObject startNode, string child_name = "")
+        public static T FindDirectChild<T>(DependencyObject startNode, string name = "")
         {
             if (startNode == null) return default;
 
@@ -82,35 +142,69 @@ namespace EMA.ExtendedWPFVisualTreeHelper
             if (children_count > 0)
             {
                 var child = VisualTreeHelper.GetChild(startNode, 0);
-                if (child != null)
+                if (child is T typedChild)
                 {
-                    if (child is T typedChild)
+                    // If the child's name is set for search:
+                    if (!string.IsNullOrEmpty(name))
                     {
-                        // If the child's name is set for search:
-                        if (!string.IsNullOrEmpty(child_name))
-                        {
-                            if (child is FrameworkElement frameworkElement && frameworkElement.Name == child_name)
-                                return typedChild;
-                            else return FindDirectChild<T>(child, child_name);
-                        }
-                        else
+                        if (child is FrameworkElement frameworkElement && frameworkElement.Name == name)
                             return typedChild;
+                        else return FindDirectChild<T>(child, name);
                     }
-                    else
-                        return FindDirectChild<T>(child, child_name);
+                    else return typedChild;
                 }
+                else return FindDirectChild<T>(child, name);
             }
             return default;
         }
 
         /// <summary>
-        /// Gets the filtered-by-type complete descendancy of a given dependency object. 
+        /// Finds the first occurence of a typed child in the descendancy of a <see cref="DependencyObject"/> node 
+        /// with optional name filtering and with the ability to travel through <see cref="ContentElement"/> objects 
+        /// while exploring the visual tree.
+        /// Direct as it only goes through the first child of visual elements, contrary to <see cref="FindChild{T}"/> which looks 
+        /// searches any children of a node to find the first matching result.
+        /// </summary>
+        /// <typeparam name="T">The type of the child to find.</typeparam>
+        /// <param name="startNode">The node where to start looking from.</param>
+        /// <param name="name">An optional name for filtering during search.</param>
+        /// <returns>A matching child, or null if none existing in the direct path.</returns>
+        public static T FindDirectChildExtended<T>(DependencyObject startNode, string name = "")
+        {
+            if (startNode == null) return default;
+            var child = (object)null;
+
+            if (startNode is Visual || startNode is Visual3D)
+                if (VisualTreeHelper.GetChildrenCount(startNode) > 0)
+                    child = VisualTreeHelper.GetChild(startNode, 0);
+            
+            if (child == null)
+                child = LogicalTreeHelper.GetChildren(startNode).OfType<ContentElement>().FirstOrDefault();
+
+            if (child is T casted)
+            {
+                // If the child's name is set for search:
+                if (!string.IsNullOrEmpty(name))
+                {
+                    if (child is FrameworkElement frameworkElement && frameworkElement.Name == name)
+                        return casted;
+                    else if (child is FrameworkContentElement frameworkContentElement && frameworkContentElement.Name == name)
+                        return casted;
+                    else return FindDirectChildExtended<T>(child as DependencyObject, name);
+                }
+                else return casted;
+            }
+            else return child is DependencyObject asDO ? FindDirectChildExtended<T>(asDO, name) : default;
+        }
+
+        /// <summary>
+        /// Gets the filtered-by-type complete descendancy of a given dependency object.
         /// </summary>
         /// <typeparam name="T">The type of the children to find.</typeparam>
         /// <param name="startNode">The node where to start looking from.</param>
         /// <returns>All found children elements that match method type.</returns>
         /// <remarks>Inspired from: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper 
-        /// and https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type.</remarks>
+        /// and https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type. </remarks>
         public static IEnumerable<T> FindAllChildren<T>(DependencyObject startNode)
         {
             if (startNode == null)
@@ -136,6 +230,53 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the filtered-by-type complete descendancy of a given dependency object with 
+        /// the ability to travel through <see cref="ContentElement"/> objects while walking down the visual tree.
+        /// </summary>
+        /// <typeparam name="T">The type of the children to find.</typeparam>
+        /// <param name="startNode">The node where to start looking from.</param>
+        /// <returns>All found children elements that match method type.</returns>
+        /// <remarks>Inspired from: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper 
+        /// and https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type. </remarks>
+        public static IEnumerable<T> FindAllChildrenExtended<T>(DependencyObject startNode)
+        {
+            if (startNode == null)
+                yield break;
+
+            var queue = new Queue<DependencyObject>(new[] { startNode });
+
+            #if NETFRAMEWORK
+            while (queue.Count > 0)
+            {
+                var toProcess = queue.Dequeue();
+            #else
+            while (queue.TryDequeue(out DependencyObject toProcess))
+            { 
+            #endif
+                if (toProcess is Visual || toProcess is Visual3D)
+                {
+                    for (var i = 0; i < VisualTreeHelper.GetChildrenCount(toProcess); i++)
+                    {
+                        var child = VisualTreeHelper.GetChild(toProcess, i);
+                        if (child is T casted)
+                            yield return casted;
+
+                        queue.Enqueue(child);
+                    }
+                }
+
+                var children = LogicalTreeHelper.GetChildren(toProcess).OfType<ContentElement>();
+                foreach (var child in children)
+                {
+                    if (child is T casted)
+                        yield return casted;
+                    if (child is DependencyObject castedDO)
+                        queue.Enqueue(castedDO);
+                }
+            }
+        }
         #endregion
 
         #region Find parents
@@ -146,7 +287,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="child">The node where to start looking from.</param>
         /// <param name="name">Optional name of the parent to find.</param>
         /// <returns>The matching parent, or null if none.</returns>
-        /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent.</remarks>
+        /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent. </remarks>
         public static T FindParent<T>(DependencyObject child, string name = null)
         {
             // Get parent:
@@ -281,7 +422,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// are not stictly speaking in the visual tree.</summary>
         /// <param name="child">The item to be processed.</param>
         /// <returns>The submitted item's parent, if available, null otherwise.</returns>
-        /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent.</remarks>
+        /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent. </remarks>
         public static DependencyObject GetParentExtended(DependencyObject child)
         {
             if (child == null) return null;  // tree root found.

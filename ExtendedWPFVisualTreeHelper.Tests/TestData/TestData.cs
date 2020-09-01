@@ -16,6 +16,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
         // Contains: items nammed 'A' and 'B' which are potential source/destination that are linked (can travel from parent to child and vice-versa).
         // May contain: 
         // - items nammed 'Similar' that represents a type to be encountered twice during travelling from A to B,
+        // - items nammed 'SameSibling' that represents a similar type to A or B to be encountered among their direct siblings,
         // - items nammed 'ContentElementHolder' that clearly represents items holding a ContentElement within, which are special to travel through.
         private readonly List<string> xaml_valid_test_data = new List<string>() {
             "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Name=\"A\" >" +
@@ -26,7 +27,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 "<StackPanel>" +
                     "<Grid>" +
                         "<TextBlock Name=\"B\" />" +
-                        "<TextBlock />" +
+                        "<TextBlock Name=\"SameSibling\" />" +
                     "</Grid>" +
                 "</StackPanel>" +
             "</Border>",
@@ -37,7 +38,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 "</Border>" +
                 "<Grid>" +
                     "<DockPanel>" +
-                        "<TextBlock Name=\"Similar\" />" +
+                        "<TextBlock Name=\"SameSibling\" />" +
                         "<TextBlock Name=\"B\" />" +
                     "</DockPanel>" +
                     "<TextBlock />" +
@@ -81,8 +82,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 "</StackPanel>" +
             "</StackPanel>",
 
-            "<Grid xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Name=\"A\" >" +
-                "<ContentControl>" +
+            "<Grid xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" >" +
+                "<ContentControl Name=\"A\">" +
                     "<ContentControl.ContentTemplate>" +                   
                         "<DataTemplate>" +
                             "<TextBlock Name=\"B\" Text=\"some text\" />" +
@@ -106,13 +107,12 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 "</Border>" +
                 "<Grid>" + 
                     "<DockPanel>" + 
-                        "<TextBlock />" + 
+                        "<TextBlock Name=\"SameSibling\" />" + 
                         "<TextBlock Name=\"B\" />" + 
                     "</DockPanel>" + 
                     "<TextBlock />" + 
                 "</Grid>" + 
             "</StackPanel>"
-            
         };
         #endregion
 
@@ -127,13 +127,23 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
             => raw_xaml.Contains("\"ContentElementHolder"); // can be suffixed (ex: 'ContentElementHolder2')
 
         /// <summary>
-        /// Checks if a type similar to the start node one will be found 
-        /// when travelling from start node to last one.
+        /// Checks if a type similar to the start or end node will be found 
+        /// when travelling from start to end and vice-versa.
         /// </summary>
         /// <param name="raw_xaml">Xaml as string to be inspected.</param>
         /// <returns>True if there is an object of similar type to be encountered.</returns>
         public static bool HasSimilarTypeInDirectPath(string raw_xaml)
             => raw_xaml.Contains("\"Similar"); // can be suffixed (ex: 'Similar2')
+
+        /// <summary>
+        /// Checks if a type similar to the start or end node will be found 
+        /// when travelling from start to end and vice-versa and if any siblings
+        /// at the start or end level has a similar type.
+        /// </summary>
+        /// <param name="raw_xaml">Xaml as string to be inspected.</param>
+        /// <returns>True if there is an object of similar type to be encountered.</returns>
+        public static bool HasSimilarTypeInDirectPathOrNearby(string raw_xaml)
+            => raw_xaml.Contains("\"Similar") || raw_xaml.Contains("\"SameSibling");
         #endregion
 
         protected virtual string SetStartEnd(string raw_xml)
