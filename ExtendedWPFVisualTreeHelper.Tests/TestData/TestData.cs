@@ -7,9 +7,10 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
     /// <summary>
     /// Holds test data definition for all tests. 
     /// First given item (string) is a Xaml content to be tested, 
-    /// second second (bool) indicates if travelling from A to B is possible or not.
+    /// second second (bool) indicates if travelling from A to B is possible or not
+    /// and third bool indicates if <see cref="ContentElement" /> object travelling is allowed or not.
     /// </summary>
-    public class TestData : TheoryData<string, bool>
+    public class TestData : TheoryData<string, bool, bool>
     {
         #region Data
         // This contains a XAML representation of Dependency objects to travel through
@@ -52,7 +53,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
             "</StackPanel>",
 
             "<Grid xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Name=\"A\" >" +
-                "<Button >" +
+                "<Button>" +
                     "<Button.Template>" +
                         "<ControlTemplate TargetType=\"Button\" >" +
                             "<TextBlock Name=\"B\" />" +
@@ -152,9 +153,15 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
         public TestData()
         {
             foreach(var xaml in xaml_valid_test_data)
-                Add(SetStartEnd(xaml), true);
+            {
+                Add(SetStartEnd(xaml), true, false);  // one without content elements.
+                Add(SetStartEnd(xaml), true, true);   // one with.
+            }
             foreach(var xaml in xaml_invalid_test_data)
-                Add(SetStartEnd(xaml), false);  
+            {
+                Add(SetStartEnd(xaml), false, false);
+                Add(SetStartEnd(xaml), false, true);
+            }
         }
     }
 }

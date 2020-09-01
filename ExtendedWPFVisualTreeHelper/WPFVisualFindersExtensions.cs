@@ -13,45 +13,19 @@ namespace EMA.ExtendedWPFVisualTreeHelper
     {
         #region Find children
         /// <summary>
-        /// Finds a child of in the visual tree using its type and (optionnaly) its name.
-        /// </summary>
-        /// <typeparam name="T">The type of the queried item.</typeparam>
-        /// <param name="startNode">The node where to start looking from.</param>
-        /// <param name="name">Name of the child to find.</param>
-        /// <returns>A matching child, or null if none existing.</returns>
-        /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type. </remarks>
-        public static T FindChild<T>(this DependencyObject startNode, string name = null)
-        {
-            return WPFVisualFinders.FindChild<T>(startNode, name);
-        }
-
-        /// <summary>
         /// Finds a child of in the visual tree using its type and (optionnaly) its name and with
         /// the ability to travel through <see cref="ContentElement"/> objects while exploring the visual tree.
         /// </summary>
         /// <typeparam name="T">The type of the queried item.</typeparam>
-        /// <param name="startNode">The node where to start looking from.</param>
+        /// <param name="node">The node where to start looking from.</param>
         /// <param name="name">Name of the child to find.</param>
+        /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
+        /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>A matching child, or null if none existing.</returns>
         /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type. </remarks>
-        public static T FindChildExtended<T>(this DependencyObject startNode, string name = null)
+        public static T FindChild<T>(this DependencyObject node, string name = null, bool allow_content_elements = true)
         {
-            return WPFVisualFinders.FindChildExtended<T>(startNode, name);
-        }
-
-        /// <summary>
-        /// Finds the first occurence of a typed child in the descendancy of a <see cref="DependencyObject"/> node 
-        /// with optional name filtering.
-        /// Direct as it only goes through the first child of visual elements, contrary to <see cref="FindChild{T}"/> which looks 
-        /// searches any children of a node to find the first matching result.
-        /// </summary>
-        /// <typeparam name="T">The type of the child to find.</typeparam>
-        /// <param name="startNode">The node where to start looking from.</param>
-        /// <param name="name">An optional name for filtering during search.</param>
-        /// <returns>A matching child, or null if none existing in the direct path.</returns>
-        public static T FindDirectChild<T>(this DependencyObject startNode, string name = "")
-        {
-            return WPFVisualFinders.FindDirectChild<T>(startNode, name);
+            return WPFVisualFinders.FindChild<T>(node, name, allow_content_elements);
         }
 
         /// <summary>
@@ -62,25 +36,14 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// searches any children of a node to find the first matching result.
         /// </summary>
         /// <typeparam name="T">The type of the child to find.</typeparam>
-        /// <param name="startNode">The node where to start looking from.</param>
+        /// <param name="node">The node where to start looking from.</param>
         /// <param name="name">An optional name for filtering during search.</param>
+        /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
+        /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>A matching child, or null if none existing in the direct path.</returns>
-        public static T FindDirectChildExtended<T>(this DependencyObject startNode, string name = "")
+        public static T FindDirectChild<T>(this DependencyObject node, string name = null, bool allow_content_elements = true)
         {
-            return WPFVisualFinders.FindDirectChildExtended<T>(startNode, name);
-        }
-
-        /// <summary>
-        /// Gets the filtered-by-type complete descendancy of a given dependency object.
-        /// </summary>
-        /// <typeparam name="T">The type of the children to find.</typeparam>
-        /// <param name="startNode">The node where to start looking from.</param>
-        /// <returns>All found children elements that match method type.</returns>
-        /// <remarks>Inspired from: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper 
-        /// and https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type. </remarks>
-        public static IEnumerable<T> FindAllChildren<T>(this DependencyObject startNode)
-        {
-            return WPFVisualFinders.FindAllChildren<T>(startNode);
+            return WPFVisualFinders.FindDirectChild<T>(node, name, allow_content_elements);
         }
 
         /// <summary>
@@ -88,101 +51,73 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// the ability to travel through <see cref="ContentElement"/> objects while walking down the visual tree.
         /// </summary>
         /// <typeparam name="T">The type of the children to find.</typeparam>
-        /// <param name="startNode">The node where to start looking from.</param>
+        /// <param name="node">The node where to start looking from.</param>
+        /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
+        /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>All found children elements that match method type.</returns>
         /// <remarks>Inspired from: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper 
         /// and https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type. </remarks>
-        public static IEnumerable<T> FindAllChildrenExtended<T>(this DependencyObject startNode)
+        public static IEnumerable<T> FindAllChildren<T>(this DependencyObject node, bool allow_content_elements = true)
         {
-            return WPFVisualFinders.FindAllChildrenExtended<T>(startNode);
+            return WPFVisualFinders.FindAllChildren<T>(node, allow_content_elements);
         }
         #endregion
 
         #region Find parent
         /// <summary>
-        /// Finds a parent that matches static type and (optionnaly) the passed name.
-        /// </summary>
-        /// <typeparam name="T">Type of the obect to find.</typeparam>
-        /// <param name="child">The node where to start looking from.</param>
-        /// <param name="name">Optional name of the parent to find.</param>
-        /// <returns>The matching parent, or null if none.</returns>
-        /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent. </remarks>
-        public static T FindParent<T>(this DependencyObject child, string name = null)
-        {
-            return WPFVisualFinders.FindParent<T>(child, name);
-        }
-
-        /// <summary>
         /// Finds a parent that matches static type and (optionnaly) the passed name 
         /// with the ability to travel through <see cref="ContentElement"/> objects while walking up the visual tree.
         /// </summary>
         /// <typeparam name="T">Type of the obect to find.</typeparam>
-        /// <param name="child">The node where to start looking from.</param>
+        /// <param name="node">The node where to start looking from.</param>
         /// <param name="name">Optional name of the parent to find.</param>
+        /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
+        /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The matching parent, or null if none.</returns>
-        public static T FindParentExtended<T>(this DependencyObject child, string name = null)
+        public static T FindParent<T>(this DependencyObject node, string name = null, bool allow_content_elements = true)
         {
-            return WPFVisualFinders.FindParentExtended<T>(child, name);
-        }
-
-        /// <summary>
-        /// Finds a parent that matches passed target (and dynamically defined) type and (optionnaly) a passed name.
-        /// </summary>
-        /// <param name="child">The node where to start looking from.</param>
-        /// <param name="targetType">The explicit type the parent should have.</param>
-        /// <param name="name">Optional name of the parent to find.</param>
-        /// <returns>The matching parent, or null if none.</returns>
-        public static DependencyObject FindParentByType(this DependencyObject child, Type targetType, string name = null)
-        {
-             return WPFVisualFinders.FindParentByType(child, targetType, name);
+            return WPFVisualFinders.FindParent<T>(node, name, allow_content_elements);
         }
 
         /// <summary>
         /// Finds a parent that matches passed target (and dynamically defined) type and (optionnaly) a passed name
         /// with the ability to travel through <see cref="ContentElement"/> objects while walking up the visual tree.
         /// </summary>
-        /// <param name="child">The node where to start looking from.</param>
-        /// <param name="targetType">The explicit type the parent should have.</param>
+        /// <param name="node">The node where to start looking from.</param>
+        /// <param name="type">The explicit type the parent should have.</param>
         /// <param name="name">Optional name of the parent to find.</param>
+        /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
+        /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The matching parent, or null if none.</returns>
-        public static DependencyObject FindParentByTypeExtended(this DependencyObject child, Type targetType, string name = null)
+        public static DependencyObject FindParentByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
-             return WPFVisualFinders.FindParentByTypeExtended(child, targetType, name);
-        }
-
-        /// <summary>
-        /// Return a parent at a given ancestry level.
-        /// </summary>
-        /// <param name="child">The node where to start looking from.</param>
-        /// <param name="level">The ancestry level the parent is at regarding to passed child.</param>
-        /// <returns>The parent at fiven ancestry level, or null if none found at that level.</returns>
-        public static DependencyObject FindParentByLevel(this DependencyObject child, int level = 1)
-        {
-            return WPFVisualFinders.FindParentByLevel(child, level);
+             return WPFVisualFinders.FindParentByType(node, type, name, allow_content_elements);
         }
 
         /// <summary>
         /// Return a parent at a given ancestry level with the ability to travel through 
         /// <see cref="ContentElement"/> objects while walking up the visual tree.
         /// </summary>
-        /// <param name="child">The node where to start looking from.</param>
-        /// <param name="level">The ancestry level the parent is at regarding to passed child.</param>
+        /// <param name="node">The node where to start looking from.</param>
+        /// <param name="level">The ancestry level the parent is at regarding to passed node.</param>
+        /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
+        /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The parent at fiven ancestry level, or null if none found at that level.</returns>
-        public static DependencyObject FindParentByLevelExtended(this DependencyObject child, int level = 1)
+        public static DependencyObject FindParentByLevel(this DependencyObject node, int level = 1, bool allow_content_elements = true)
         {
-            return WPFVisualFinders.FindParentByLevelExtended(child, level);
+            return WPFVisualFinders.FindParentByLevel(node, level, allow_content_elements);
         }
 
         /// <summary>
         /// Alternative to WPF's <see cref="VisualTreeHelper.GetParent"/> method, 
         /// which also supports navigation through <see cref="ContentElement"/> objects that
         /// are not stictly speaking in the visual tree.</summary>
-        /// <param name="child">The item to be processed.</param>
+        /// <param name="node">The item to be processed.</param>
         /// <returns>The submitted item's parent, if available, null otherwise.</returns>
         /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent. </remarks>
-        public static DependencyObject GetParentExtended(this DependencyObject child)
+        public static DependencyObject GetParentExtended(this DependencyObject node)
         {
-            return WPFVisualFinders.GetParentExtended(child);
+            return WPFVisualFinders.GetParentExtended(node);
         }
         #endregion
     }
