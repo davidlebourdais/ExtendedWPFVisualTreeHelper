@@ -21,11 +21,26 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">Name of the child to find.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
-        /// <returns>A matching child, or null if none existing.</returns>
+        /// <returns>A matching child, or default if none existing.</returns>
         /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type. </remarks>
         public static T FindChild<T>(this DependencyObject node, string name = null, bool allow_content_elements = true)
         {
             return WPFVisualFinders.FindChild<T>(node, name, allow_content_elements);
+        }
+
+        /// <summary>
+        /// Finds a child of in the visual tree using its type and (optionnaly) its name and with
+        /// the ability to travel through <see cref="ContentElement"/> objects while exploring the visual tree.
+        /// </summary>
+        /// <param name="node">The node where to start looking from.</param>
+        /// <param name="type">Type of the child to find.</param>
+        /// <param name="name">Name of the child to find.</param>
+        /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
+        /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <returns>A matching child, or null if none existing.</returns>
+        public static object FindChildByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        {
+            return WPFVisualFinders.FindChildByType(node, type, name, allow_content_elements);
         }
 
         /// <summary>
@@ -40,10 +55,28 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">An optional name for filtering during search.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
-        /// <returns>A matching child, or null if none existing in the direct path.</returns>
+        /// <returns>A matching child, or default if none existing in the direct path.</returns>
         public static T FindDirectChild<T>(this DependencyObject node, string name = null, bool allow_content_elements = true)
         {
             return WPFVisualFinders.FindDirectChild<T>(node, name, allow_content_elements);
+        }
+        
+        /// <summary>
+        /// Finds the first occurence of a typed child in the descendancy of a <see cref="DependencyObject"/> node 
+        /// with optional name filtering and with the ability to travel through <see cref="ContentElement"/> objects 
+        /// while exploring the visual tree.
+        /// Direct as it only goes through the first child of visual elements, contrary to <see cref="FindChild{T}"/> which looks 
+        /// searches any children of a node to find the first matching result.
+        /// </summary>
+        /// <param name="node">The node where to start looking from.</param>
+        /// <param name="type">Type of the child to find.</param>
+        /// <param name="name">An optional name for filtering during search.</param>
+        /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
+        /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <returns>A matching child, or null if none existing in the direct path.</returns>
+        public static object FindDirectChildByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        {
+            return WPFVisualFinders.FindDirectChildByType(node, type, name, allow_content_elements);
         }
 
         /// <summary>
@@ -60,6 +93,20 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         public static IEnumerable<T> FindAllChildren<T>(this DependencyObject node, bool allow_content_elements = true)
         {
             return WPFVisualFinders.FindAllChildren<T>(node, allow_content_elements);
+        }
+
+        /// <summary>
+        /// Gets the filtered-by-type complete descendancy of a given dependency object with 
+        /// the ability to travel through <see cref="ContentElement"/> objects while walking down the visual tree.
+        /// </summary>
+        /// <param name="node">The node where to start looking from.</param>
+        /// <param name="type">Type of the child to find.</param>
+        /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
+        /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <returns>All found children elements that match passed type.</returns>
+        public static IEnumerable<object> FindAllChildrenByType(this DependencyObject node, Type type, bool allow_content_elements = true)
+        {
+            return WPFVisualFinders.FindAllChildrenByType(node, type, allow_content_elements);
         }
         #endregion
 
@@ -89,7 +136,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The matching parent, or null if none.</returns>
-        public static DependencyObject FindParentByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        public static object FindParentByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
              return WPFVisualFinders.FindParentByType(node, type, name, allow_content_elements);
         }
