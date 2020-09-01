@@ -19,6 +19,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
         // - items nammed 'Similar' that represents a type to be encountered twice during travelling from A to B,
         // - items nammed 'SameSibling' that represents a similar type to A or B to be encountered among their direct siblings,
         // - items nammed 'ContentElementHolder' that clearly represents items holding a ContentElement within, which are special to travel through.
+        // - items nammed 'C' which are aimed to be replaced in order to create a secondary 'end' point.
+        // Keep in mind that names cannot be reproduced in the xaml' scope, except if defined in a template. 'A', 'B', 'C' must be unique in xaml's scope.
         private readonly List<string> xaml_valid_test_data = new List<string>() {
             "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Name=\"A\" >" +
                 "<TextBlock Name=\"B\" />" +
@@ -38,16 +40,16 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                     "<TextBox />" +
                 "</Border>" +
                 "<Grid>" +
-                    "<DockPanel>" +
-                        "<TextBlock Name=\"SameSibling\" />" +
-                        "<TextBlock Name=\"B\" />" +
-                    "</DockPanel>" +
+                    "<StackPanel>" +
+                        "<TextBlock />" +
+                        "<TextBlock />" +
+                    "</StackPanel>" +
                     "<TextBlock />" +
                     "<DockPanel>" +
-                        "<StackPanel>" +
-                            "<TextBlock />" +
-                            "<TextBlock />" +
-                        "</StackPanel>" +
+                        "<DockPanel>" +                            
+                            "<TextBlock Name=\"SameSibling\" />" +
+                            "<TextBlock Name=\"B\" />" +
+                        "</DockPanel>" +
                     "</DockPanel>" +
                 "</Grid>" +
             "</StackPanel>",
@@ -91,7 +93,19 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                         "</DataTemplate>" +
                     "</ContentControl.ContentTemplate>" +
                 "</ContentControl>" + 
-            "</Grid>"
+            "</Grid>",
+
+            "<StackPanel xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Name=\"A\" >" +
+                "<TextBlock Name=\"SameSibling\" />" +
+                "<ContentControl>" +
+                    "<ContentControl.ContentTemplate>" +                   
+                        "<DataTemplate>" +
+                            "<TextBlock Name=\"C\" />" +
+                        "</DataTemplate>" +
+                    "</ContentControl.ContentTemplate>" +
+                "</ContentControl>" + 
+                "<TextBlock Name=\"B\" />" +
+            "</StackPanel>",
         };
 
         // Contains a set of data that will always lead to failure as elements 
@@ -145,10 +159,18 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
         /// <returns>True if there is an object of similar type to be encountered.</returns>
         public static bool HasSimilarTypeInDirectPathOrNearby(string raw_xaml)
             => raw_xaml.Contains("\"Similar") || raw_xaml.Contains("\"SameSibling");
+
+        /// <summary>
+        /// Sets end point on any elements nammed "C".
+        /// </summary>
+        /// <param name="raw_xaml">Xaml as string to be modified.</param>
+        /// <returns>The raw xaml containing new end points if any predefined..</returns>
+        public static string SetMultipleEnd(string raw_xaml)
+            => raw_xaml.Replace("\"C\"", "\"End\"");
         #endregion
 
-        protected virtual string SetStartEnd(string raw_xml)
-            => raw_xml.Replace("\"A\"", "\"Start\"").Replace("\"B\"", "\"End\"");
+        protected virtual string SetStartEnd(string raw_xaml)
+            => raw_xaml.Replace("\"A\"", "\"Start\"").Replace("\"B\"", "\"End\"");
 
         public TestData()
         {

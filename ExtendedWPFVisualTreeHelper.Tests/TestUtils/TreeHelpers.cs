@@ -1,8 +1,10 @@
+using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EMA.ExtendedWPFVisualTreeHelper.Tests.Utils
 {
@@ -82,6 +84,37 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests.Utils
                     var contentElements = LogicalTreeHelper.GetChildren(node).OfType<ContentElement>();
                     if (contentElements.FirstOrDefault() is DependencyObject asDO)
                         result = FindDirectElementByName(asDO, name, allow_content_elements);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds an element from a visual tree by its type. This element must be in the direct path 
+        /// of the current element to be found otherwise null is returned.
+        /// </summary>
+        /// <param name="node">Starting node where to look for the nammed element.</param>
+        /// <param name="type">Type of the element to find.</param>
+        /// <param name="allow_content_elements">Allow travelling through <see cref="ContentElement"/> objects.</param>
+        /// <returns>The nammed element, if found, null otherwise.</returns>
+        public static DependencyObject FindDirectElementByType(DependencyObject node, Type type, bool allow_content_elements = true)
+        {
+            if (node == null) return null;
+
+            var result = node.GetType().Equals(type) || node.GetType().GetTypeInfo().IsSubclassOf(type) ? node : null;
+            if (result == null)
+            {
+                int count = 0;
+                if (node is Visual || node is Visual3D)
+                    count = VisualTreeHelper.GetChildrenCount(node);
+                if (count > 0)
+                    result = FindDirectElementByType(VisualTreeHelper.GetChild(node, 0), type, allow_content_elements);
+                else if (allow_content_elements)
+                {
+                    var contentElements = LogicalTreeHelper.GetChildren(node).OfType<ContentElement>();
+                    if (contentElements.FirstOrDefault() is DependencyObject asDO)
+                        result = FindDirectElementByType(asDO, type, allow_content_elements);
                 }
             }
 

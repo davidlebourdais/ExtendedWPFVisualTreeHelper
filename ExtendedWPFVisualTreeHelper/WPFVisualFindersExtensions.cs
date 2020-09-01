@@ -85,14 +85,15 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <typeparam name="T">The type of the children to find.</typeparam>
         /// <param name="node">The node where to start looking from.</param>
+        /// <param name="name">An optional name for filtering during search.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>All found children elements that match method type.</returns>
         /// <remarks>Inspired from: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper 
         /// and https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type. </remarks>
-        public static IEnumerable<T> FindAllChildren<T>(this DependencyObject node, bool allow_content_elements = true)
+        public static IEnumerable<T> FindAllChildren<T>(this DependencyObject node, string name = null, bool allow_content_elements = true)
         {
-            return WPFVisualFinders.FindAllChildren<T>(node, allow_content_elements);
+            return WPFVisualFinders.FindAllChildren<T>(node, name, allow_content_elements);
         }
 
         /// <summary>
@@ -101,12 +102,13 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <param name="node">The node where to start looking from.</param>
         /// <param name="type">Type of the child to find.</param>
+        /// <param name="name">An optional name for filtering during search.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>All found children elements that match passed type.</returns>
-        public static IEnumerable<object> FindAllChildrenByType(this DependencyObject node, Type type, bool allow_content_elements = true)
+        public static IEnumerable<object> FindAllChildrenByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
-            return WPFVisualFinders.FindAllChildrenByType(node, type, allow_content_elements);
+            return WPFVisualFinders.FindAllChildrenByType(node, type, name, allow_content_elements);
         }
         #endregion
 

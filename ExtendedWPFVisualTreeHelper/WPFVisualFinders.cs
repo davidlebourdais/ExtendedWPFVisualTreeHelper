@@ -230,12 +230,13 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <typeparam name="T">The type of the children to find.</typeparam>
         /// <param name="node">The node where to start looking from.</param>
+        /// <param name="name">An optional name for filtering during search.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>All found children elements that match method type.</returns>
         /// <remarks>Inspired from: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper 
         /// and https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type. </remarks>
-        public static IEnumerable<T> FindAllChildren<T>(DependencyObject node, bool allow_content_elements = true)
+        public static IEnumerable<T> FindAllChildren<T>(DependencyObject node, string name = null, bool allow_content_elements = true)
         {
             if (node == null)
                 yield break;
@@ -256,7 +257,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                     {
                         var child = VisualTreeHelper.GetChild(toProcess, i);
                         if (child is T casted)
-                            yield return casted;
+                            if (string.IsNullOrEmpty(name) || (child is FrameworkElement asFE && asFE.Name == name))
+                                yield return casted;
 
                         queue.Enqueue(child);
                     }
@@ -268,7 +270,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                     foreach (var child in children)
                     {
                         if (child is T casted)
-                            yield return casted;
+                            if (string.IsNullOrEmpty(name) || (child is FrameworkContentElement asFCE && asFCE.Name == name))
+                                yield return casted;
                         if (child is DependencyObject castedDO)
                             queue.Enqueue(castedDO);
                     }
@@ -282,10 +285,11 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <param name="node">The node where to start looking from.</param>
         /// <param name="type">Type of the child to find.</param>
+        /// <param name="name">An optional name for filtering during search.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>All found children elements that match passed type.</returns>
-        public static IEnumerable<object> FindAllChildrenByType(DependencyObject node, Type type, bool allow_content_elements = true)
+        public static IEnumerable<object> FindAllChildrenByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
             if (node == null || type == null)
                 yield break;
@@ -306,7 +310,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                     {
                         var child = VisualTreeHelper.GetChild(toProcess, i);
                         if (child != null && (child.GetType().Equals(type) || child.GetType().GetTypeInfo().IsSubclassOf(type)))
-                            yield return child;
+                            if (string.IsNullOrEmpty(name) || (child is FrameworkElement asFE && asFE.Name == name))
+                                yield return child;
 
                         queue.Enqueue(child);
                     }
@@ -318,7 +323,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                     foreach (var child in children)
                     {
                         if (child != null && (child.GetType().Equals(type) || child.GetType().GetTypeInfo().IsSubclassOf(type)))
-                            yield return child;
+                            if (string.IsNullOrEmpty(name) || (child is FrameworkContentElement asFCE && asFCE.Name == name))
+                                yield return child;
                         if (child is DependencyObject castedDO)
                             queue.Enqueue(castedDO);
                     }

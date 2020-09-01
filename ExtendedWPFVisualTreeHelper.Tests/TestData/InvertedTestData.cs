@@ -6,8 +6,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
     /// </summary>
     public class InvertedTestData : TestData
     {
-        protected override string SetStartEnd(string raw_xml)
-            => raw_xml.Replace("\"A\"", "\"End\"").Replace("\"B\"", "\"Start\"");
+        protected override string SetStartEnd(string raw_xaml)
+            => raw_xaml.Replace("\"A\"", "\"End\"").Replace("\"B\"", "\"Start\"");
 
         public InvertedTestData() : base()
         {   }
