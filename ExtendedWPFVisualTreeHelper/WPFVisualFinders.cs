@@ -89,7 +89,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>A matching child, or null if none existing.</returns>
-        public static object FindChildByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        public static DependencyObject FindChildByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
             if (node == null || type == null) return null;
 
@@ -196,7 +196,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>A matching child, or null if none existing in the direct path.</returns>
-        public static object FindDirectChildByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        public static DependencyObject FindDirectChildByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
             if (node == null || type == null) return null;
             var child = (object)null;
@@ -213,13 +213,13 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                 // If the child's name is set for search:
                 if (!string.IsNullOrEmpty(name))
                 {
-                    if (child is FrameworkElement frameworkElement && frameworkElement.Name == name)
-                        return child;
-                    else if (child is FrameworkContentElement frameworkContentElement && frameworkContentElement.Name == name)
-                        return child;
+                    if (child is FrameworkElement asFE && asFE.Name == name)
+                        return asFE;
+                    else if (child is FrameworkContentElement asFCE && asFCE.Name == name)
+                        return asFCE;
                     else return FindDirectChildByType(child as DependencyObject, type, name, allow_content_elements);
                 }
-                else return child;
+                else return child as DependencyObject;
             }
             else return child is DependencyObject asDO ? FindDirectChildByType(asDO, type, name, allow_content_elements) : null;
         }
@@ -289,7 +289,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>All found children elements that match passed type.</returns>
-        public static IEnumerable<object> FindAllChildrenByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        public static IEnumerable<DependencyObject> FindAllChildrenByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
             if (node == null || type == null)
                 yield break;
@@ -370,7 +370,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The matching parent, or null if none.</returns>
-        public static object FindParentByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        public static DependencyObject FindParentByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
             // Get parent:
             var parent = allow_content_elements ? GetParentExtended(node) : (node is Visual || node is Visual3D) ? VisualTreeHelper.GetParent(node) : null;

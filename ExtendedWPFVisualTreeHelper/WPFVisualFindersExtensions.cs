@@ -38,7 +38,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>A matching child, or null if none existing.</returns>
-        public static object FindChildByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        public static DependencyObject FindChildByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
             return WPFVisualFinders.FindChildByType(node, type, name, allow_content_elements);
         }
@@ -74,7 +74,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>A matching child, or null if none existing in the direct path.</returns>
-        public static object FindDirectChildByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        public static DependencyObject FindDirectChildByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
             return WPFVisualFinders.FindDirectChildByType(node, type, name, allow_content_elements);
         }
@@ -106,7 +106,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>All found children elements that match passed type.</returns>
-        public static IEnumerable<object> FindAllChildrenByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        public static IEnumerable<DependencyObject> FindAllChildrenByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
             return WPFVisualFinders.FindAllChildrenByType(node, type, name, allow_content_elements);
         }
@@ -138,7 +138,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The matching parent, or null if none.</returns>
-        public static object FindParentByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+        public static DependencyObject FindParentByType(this DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
         {
              return WPFVisualFinders.FindParentByType(node, type, name, allow_content_elements);
         }

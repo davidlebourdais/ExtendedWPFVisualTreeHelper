@@ -264,8 +264,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var result = WPFVisualFinders.FindAllChildrenByType(origin, targetType, allow_content_elements: allow_content_elements);
                 Assert.Equal(expected, result);
                 if (related_in_path && (allow_content_elements || !has_content_element_in_path))
-                    Assert.Contains(expectedSpecificItem, result as IEnumerable<object>);
-                else Assert.DoesNotContain(expectedSpecificItem, result as IEnumerable<object>);
+                    Assert.Contains(expectedSpecificItem, result as IEnumerable<DependencyObject>);
+                else Assert.DoesNotContain(expectedSpecificItem, result as IEnumerable<DependencyObject>);
 
                 // Test extension with unnammed targets:
                 var extresult = origin.FindAllChildrenByType(targetType, allow_content_elements: allow_content_elements);
@@ -275,8 +275,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 result = WPFVisualFinders.FindAllChildrenByType(origin, targetType, "End", allow_content_elements);
                 Assert.Equal(expected_nammed, result);
                 if (related_in_path && (allow_content_elements || !has_content_element_in_path))
-                    Assert.Contains(expectedSpecificItem, result as IEnumerable<object>);
-                else Assert.DoesNotContain(expectedSpecificItem, result as IEnumerable<object>);
+                    Assert.Contains(expectedSpecificItem, result as IEnumerable<DependencyObject>);
+                else Assert.DoesNotContain(expectedSpecificItem, result as IEnumerable<DependencyObject>);
 
                 // Test extension with nammed targets:
                 extresult = origin.FindAllChildrenByType(targetType, "End", allow_content_elements);
