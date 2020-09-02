@@ -18,7 +18,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <typeparam name="T">The type of the queried item.</typeparam>
         /// <param name="node">The node where to start looking from.</param>
-        /// <param name="name">Name of the child to find.</param>
+        /// <param name="name">Optional name or regex that matches name of the child to find.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>A matching child, or default if none existing.</returns>
@@ -34,7 +34,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <param name="node">The node where to start looking from.</param>
         /// <param name="type">Type of the child to find.</param>
-        /// <param name="name">Name of the child to find.</param>
+        /// <param name="name">Optional name or regex that matches name of the child to find.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>A matching child, or null if none existing.</returns>
@@ -52,7 +52,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <typeparam name="T">The type of the child to find.</typeparam>
         /// <param name="node">The node where to start looking from.</param>
-        /// <param name="name">An optional name for filtering during search.</param>
+        /// <param name="name">Optional name or regex that matches name of the child to find.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>A matching child, or default if none existing in the direct path.</returns>
@@ -70,7 +70,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <param name="node">The node where to start looking from.</param>
         /// <param name="type">Type of the child to find.</param>
-        /// <param name="name">An optional name for filtering during search.</param>
+        /// <param name="name">Optional name or regex that matches name of the child to find.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>A matching child, or null if none existing in the direct path.</returns>
@@ -85,7 +85,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <typeparam name="T">The type of the children to find.</typeparam>
         /// <param name="node">The node where to start looking from.</param>
-        /// <param name="name">An optional name for filtering during search.</param>
+        /// <param name="name">An optional name or regex pattern to be used for filtering during search.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>All found children elements that match method type.</returns>
@@ -102,7 +102,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <param name="node">The node where to start looking from.</param>
         /// <param name="type">Type of the child to find.</param>
-        /// <param name="name">An optional name for filtering during search.</param>
+        /// <param name="name">An optional name or regex pattern to be used for filtering during search.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>All found children elements that match passed type.</returns>
@@ -112,14 +112,14 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         }
         #endregion
 
-        #region Find parent
+        #region Find parents
         /// <summary>
         /// Finds a parent that matches static type and (optionnaly) the passed name 
         /// with the ability to travel through <see cref="ContentElement"/> objects while walking up the visual tree.
         /// </summary>
         /// <typeparam name="T">Type of the obect to find.</typeparam>
         /// <param name="node">The node where to start looking from.</param>
-        /// <param name="name">Optional name of the parent to find.</param>
+        /// <param name="name">Optional name or regex that matches name of the parent to find.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The matching parent, or null if none.</returns>
@@ -134,7 +134,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// </summary>
         /// <param name="node">The node where to start looking from.</param>
         /// <param name="type">The explicit type the parent should have.</param>
-        /// <param name="name">Optional name of the parent to find.</param>
+        /// <param name="name">Optional name or regex that matches name of the parent to find.</param>
         /// <param name="allow_content_elements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The matching parent, or null if none.</returns>

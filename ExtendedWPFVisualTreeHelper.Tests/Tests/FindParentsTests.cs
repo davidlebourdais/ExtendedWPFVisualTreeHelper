@@ -45,9 +45,15 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                     Assert.Same(expected, nammed_result);
                 else Assert.Null(result);
 
-                // Test extension method with nammed target:
+                // Test with regex:
+                var regex_result = method.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allow_content_elements });
+                Assert.Same(nammed_result, regex_result);
+
+                // Test extension method with nammed target and regex:
                 var nammed_extresult = extMethod.Invoke(null, new object[] { origin, "End", allow_content_elements });
+                var regex_extresult = method.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allow_content_elements });
                 Assert.Same(nammed_result, nammed_extresult);
+                Assert.Same(nammed_result, regex_extresult);
             }
 
             WPFAppTester.RunTestInWindow(inspect, xaml);
@@ -87,9 +93,15 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                     Assert.Same(expected, nammed_result);
                 else Assert.Null(result);
 
-                // Test extension method with nammed target:
+                // Test with regex:
+                var regex_result = WPFVisualFinders.FindParentByType(origin, expected.GetType(), @"E[a-z]\D{1}", allow_content_elements);
+                Assert.Same(nammed_result, regex_result);
+
+                // Test extension method with nammed target and regex:
                 var nammed_extresult = origin.FindParentByType(expected.GetType(), "End", allow_content_elements);
+                var regex_extresult = origin.FindParentByType(expected.GetType(), @"E[a-z]\D{1}", allow_content_elements);
                 Assert.Same(nammed_result, nammed_extresult);
+                Assert.Same(nammed_result, regex_extresult);
             }
 
             WPFAppTester.RunTestInWindow(inspect, xaml);

@@ -8,29 +8,13 @@ Goes beyond framework's VisualTreeHelper [GetParent](https://docs.microsoft.com/
  - Use 'FindParent' methods to travel the visual tree up and 'FindChildren' methods to walk it down
  - Use either static helpers or extension methods:
 	 - ex: *WPFVisualFinders.FindParent(node)* or *node.FindParent()*
- - Most searches target a specific type and a optionally a name:
+ - Most searches target a specific type and optionally a name or a regex filter:
 	 - Type can be given at compile time, or at runtime using the 'ByType' methods 
-		 - ex: *FindParent{T}()* vs *FindParentByType(myType)*
+		 - ex: *FindParent{MyType}(node)* vs *FindParentByType(node, myTypeInstance)*
 	 - You can target the 'object' type to get rid or type filtering during search
-	 - Named item search is activated when setting the optional 'name' arguments
-	 - Exact naming is assessed for name searches
+	 - Item search-by-name is complementary and is activated when setting the optional 'name' argument
+	 - Name can be the exact name or a [regular expression](https://docs.microsoft.com/en-us/dotnet/standard/base-types/regular-expressions) 
 
-
-## About ContentElements
-[ContentElements](https://docs.microsoft.com/en-us/dotnet/api/system.windows.contentelemen) - and more specifically their derived [ContentFrameworkElement](https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkcontentelement) counterparts - are special items that dictates rendering on screen for the part they describe but are not attachable to the visual tree and rely on the logical one. However, these items have many APIs in common with the objects we find on visual tree (specifically [FrameworkElement](https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkelement)) -including naming -, are directly visible in the XAML definitions, and might contain useful information about the visual they represent.
-
-All these reasons make them important nodes to find or travel through while exploring the visual tree, although they are not part of it. As a consequence: 
-
-> All provided methods allows [ContentElement](https://docs.microsoft.com/en-us/dotnet/api/system.windows.contentelemen) traversal by default. 
-> This feature can disabled by setting **allow_content_elements = false** on any method call.
-
-Some ContentElement examples:
-- [ColumnDefinition](https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.columndefinition?view=netcore-3.1)
-- [Run](https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.run)
-- [Section](https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.section)
-- [List](https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.list)
-- [TableCell](https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.tablecell)
-- etc.
 
 ## Reference
 
@@ -49,7 +33,7 @@ Finds a child of a specific type by walking down the visual tree from the passed
     DependencyObject FindDirectChild(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
 
 ### FindAllChildren & FindAllChildrenByType
-Builds up an enumerable of all passed node's descendants that match target type and optional name. Looks at every paths from top node.
+Builds up an enumerable of all passed node's descendants that match target type and optional name or regex. Looks at every paths from top node.
 
     IEnumerable<T> FindAllChildren<T>(DependencyObject node, string name = null, bool allow_content_elements = true)
 
@@ -59,7 +43,7 @@ Builds up an enumerable of all passed node's descendants that match target type 
 This method explores and exposes the matching children level-by-level rather than branch-by-branch. Thus, all matching children are exposed, then all matching grandchildren, then all matching grand-grandchildren, etc.
 
 ### FindParent & FindParentByType
-Finds first parent that matches specified type and optional name by walking up the visual tree from the passed node. Returns null after tree top is reached with no result.
+Finds first parent that matches specified type and optional name or regex by walking up the visual tree from the passed node. Returns null after tree top is reached with no result.
 
     T FindParent<T>(DependencyObject node, string name = null, bool allow_content_elements = true)
 
@@ -77,3 +61,19 @@ When level defaults to 1, the method gets the immediate parent.
 An extension of the [VisualTreeHelper.GetParent()](https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.visualtreehelper.getparent) method that supports travel through ContentElement objects.
 
     DependencyObject GetParentExtended(DependencyObject node)
+
+## About ContentElements
+[ContentElements](https://docs.microsoft.com/en-us/dotnet/api/system.windows.contentelemen) - and more specifically their derived [ContentFrameworkElement](https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkcontentelement) counterparts - are special items that dictates rendering on screen for the part they describe but are not attachable to the visual tree and rely on the logical one. However, these items have many APIs in common with the objects we find on visual tree (specifically [FrameworkElement](https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkelement)) -including naming -, are directly visible in the XAML definitions, and might contain useful information about the visual they represent.
+
+All these reasons make them important nodes to find or travel through while exploring the visual tree, although they are not part of it. As a consequence: 
+
+> All provided methods allows [ContentElement](https://docs.microsoft.com/en-us/dotnet/api/system.windows.contentelemen) traversal by default. 
+> This feature can disabled by setting **allow_content_elements = false** on any method call.
+
+Some ContentElement examples:
+- [ColumnDefinition](https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.columndefinition?view=netcore-3.1)
+- [Run](https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.run)
+- [Section](https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.section)
+- [List](https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.list)
+- [TableCell](https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.tablecell)
+- etc.

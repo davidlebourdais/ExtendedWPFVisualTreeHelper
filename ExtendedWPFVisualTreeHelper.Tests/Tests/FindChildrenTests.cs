@@ -3,6 +3,7 @@ using System.Windows;
 using EMA.ExtendedWPFVisualTreeHelper.Tests.Utils;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace EMA.ExtendedWPFVisualTreeHelper.Tests
 {
@@ -47,9 +48,15 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                     Assert.Same(expected, nammed_result);
                 else Assert.Null(result);
 
-                // Test extension method with nammed target:
+                // Test with regex:
+                var regex_result = method.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allow_content_elements });
+                Assert.Same(nammed_result, regex_result);
+
+                // Test extension method with nammed target and regex:
                 var nammed_extresult = extMethod.Invoke(null, new object[] { origin, "End", allow_content_elements });
+                var regex_extresult = method.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allow_content_elements });
                 Assert.Same(nammed_result, nammed_extresult);
+                Assert.Same(nammed_result, regex_extresult);
             }
 
             WPFAppTester.RunTestInWindow(inspect, xaml);
@@ -89,9 +96,15 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                     Assert.Same(expected, nammed_result);
                 else Assert.Null(nammed_result);
 
-                // Test extension method with nammed target:
+                // Test with regex:
+                var regex_result = WPFVisualFinders.FindChildByType(origin, expected.GetType(), @"E[a-z]\D{1}", allow_content_elements);
+                Assert.Same(nammed_result, regex_result);
+
+                // Test extension method with nammed target and regex:
                 var nammed_extresult = origin.FindChildByType(expected.GetType(), "End", allow_content_elements);
+                var regex_extresult = origin.FindChildByType(expected.GetType(), @"E[a-z]\D{1}", allow_content_elements);
                 Assert.Same(nammed_result, nammed_extresult);
+                Assert.Same(nammed_result, regex_extresult);
             }
 
             WPFAppTester.RunTestInWindow(inspect, xaml);
@@ -136,10 +149,16 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 if (in_direct_path && (allow_content_elements || !has_content_element_in_path)) // should always find if related in path
                     Assert.Same(expected, nammed_result);
                 else Assert.Null(nammed_result);
+                
+                // Test with regex:
+                var regex_result = method.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allow_content_elements });
+                Assert.Same(nammed_result, regex_result);
 
-                // Test extension method with nammed target:
+                // Test extension method with nammed target and regex:
                 var nammed_extresult = extMethod.Invoke(null, new object[] { origin, "End", allow_content_elements });
+                var regex_extresult = method.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allow_content_elements });
                 Assert.Same(nammed_result, nammed_extresult);
+                Assert.Same(nammed_result, regex_extresult);
             }
 
             WPFAppTester.RunTestInWindow(inspect, xaml);
@@ -179,9 +198,15 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                     Assert.Same(expected, nammed_result);
                 else Assert.Null(nammed_result);
 
-                // Test extension method with nammed target:
+                // Test with regex:
+                var regex_result = WPFVisualFinders.FindDirectChildByType(origin, expected.GetType(), @"E[a-z]\D{1}", allow_content_elements);
+                Assert.Same(nammed_result, regex_result);
+
+                // Test extension method with nammed target and regex:
                 var nammed_extresult = origin.FindDirectChildByType(expected.GetType(), "End", allow_content_elements);
+                var regex_extresult = origin.FindDirectChildByType(expected.GetType(), @"E[a-z]\D{1}", allow_content_elements);
                 Assert.Same(nammed_result, nammed_extresult);
+                Assert.Same(nammed_result, regex_extresult);
             }
 
             WPFAppTester.RunTestInWindow(inspect, xaml);
@@ -208,6 +233,9 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var targetType = expectedSpecificItem.GetType();
                 var expected = flattenTree.Where(x => x.GetType() == targetType);
                 var expected_nammed = expected.Where(x => (x is FrameworkElement asFE && asFE.Name == "End") || (x is FrameworkContentElement asFCE && asFCE.Name == "End"));
+
+                // For this test, target nodes marked as 'siblings' as we may find more than ones with 'End':
+                var expected_regex = expected.Where(x => (x is FrameworkElement asFE && Regex.IsMatch(asFE.Name, ".*[A-Z]ibling.*")) || (x is FrameworkContentElement asFCE && Regex.IsMatch(asFCE.Name, ".*[A-Z]ibling.*")));
 
                 // Build generic methods manualy, since the type to seek might change for each data set:
                 var methodInfo = typeof(WPFVisualFinders).GetMethod("FindAllChildren");
@@ -236,6 +264,14 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 // Test extension with nammed targets:
                 extresult = extMethod.Invoke(origin, new object[] { origin, "End", allow_content_elements });
                 Assert.Equal(result, extresult);
+                
+                // Test regex pattern on similar types nammed "SimilarSiblings":
+                result = WPFVisualFinders.FindAllChildrenByType(origin, targetType, ".*[A-Z]ibling.*", allow_content_elements);
+                Assert.Equal(expected_regex, result);
+
+                // Test extension with regex pattern:
+                extresult = origin.FindAllChildrenByType(targetType, ".*[A-Z]ibling.*", allow_content_elements);
+                Assert.Equal(result, extresult);
             }
 
             WPFAppTester.RunTestInWindow(inspect, xaml);
@@ -260,6 +296,9 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var expected = flattenTree.Where(x => x.GetType() == targetType);
                 var expected_nammed = expected.Where(x => (x is FrameworkElement asFE && asFE.Name == "End") || (x is FrameworkContentElement asFCE && asFCE.Name == "End"));
 
+                // For this test, target nodes marked as 'siblings' as we may find more than ones with 'End':
+                var expected_regex = expected.Where(x => (x is FrameworkElement asFE && Regex.IsMatch(asFE.Name, ".*[A-Z]ibling.*")) || (x is FrameworkContentElement asFCE && Regex.IsMatch(asFCE.Name, ".*[A-Z]ibling.*")));
+
                 // Test unnammed:
                 var result = WPFVisualFinders.FindAllChildrenByType(origin, targetType, allow_content_elements: allow_content_elements);
                 Assert.Equal(expected, result);
@@ -280,6 +319,14 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
 
                 // Test extension with nammed targets:
                 extresult = origin.FindAllChildrenByType(targetType, "End", allow_content_elements);
+                Assert.Equal(result, extresult);
+
+                // Test regex pattern on similar types nammed "SameSibling":
+                result = WPFVisualFinders.FindAllChildrenByType(origin, targetType, ".*[A-Z]ibling.*", allow_content_elements);
+                Assert.Equal(expected_regex, result);
+
+                // Test extension with regex pattern:
+                extresult = origin.FindAllChildrenByType(targetType, ".*[A-Z]ibling.*", allow_content_elements);
                 Assert.Equal(result, extresult);
             }
 
