@@ -1,4 +1,9 @@
 # WPF Visual Tree Helper
+
+[![Build Status](https://dev.azure.com/davidlebourdais/ExtendedWPFVisualTreeHelper/_apis/build/status/davidlebourdais.ExtendedWPFVisualTreeHelper?branchName=master)](https://dev.azure.com/davidlebourdais/ExtendedWPFVisualTreeHelper/_build/latest?definitionId=1&branchName=master)
+[![NuGet](https://img.shields.io/nuget/v/ExtendedWPFVisualTreeHelper.svg)](https://www.nuget.org/packages/ExtendedWPFVisualTreeHelper)
+[![Issues](https://img.shields.io/github/issues/davidlebourdais/ExtendedWPFVisualTreeHelper.svg)](https://github.com/davidlebourdais/ExtendedWPFVisualTreeHelper/issues)
+
 Provides methods to travel a WPF visual tree and to find items of interest. 
 
 Goes beyond framework's VisualTreeHelper [GetParent](https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.visualtreehelper.getparent) and [GetChild](https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.visualtreehelper.getchild) methods by allowing traversal of [ContentElement](https://docs.microsoft.com/en-us/dotnet/api/system.windows.contentelemen) objects. 
@@ -77,3 +82,6 @@ Some ContentElement examples:
 - [List](https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.list)
 - [TableCell](https://docs.microsoft.com/en-us/dotnet/api/system.windows.documents.tablecell)
 - etc.
+
+## License
+This work is licensed under the [MIT License](LICENSE.md).
