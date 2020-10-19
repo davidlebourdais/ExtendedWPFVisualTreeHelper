@@ -1,6 +1,6 @@
 # WPF Visual Tree Helper
 
-[![Build Status](https://dev.azure.com/davidlebourdais/ExtendedWPFVisualTreeHelper/_apis/build/status/davidlebourdais.ExtendedWPFVisualTreeHelper?branchName=master)](https://dev.azure.com/davidlebourdais/ExtendedWPFVisualTreeHelper/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/davidlebourdais/ExtendedWPFVisualTreeHelper/_apis/build/status/davidlebourdais.ExtendedWPFVisualTreeHelper?branchName=master)](https://dev.azure.com/davidlebourdais/ExtendedWPFVisualTreeHelper/_build/latest?definitionId=11&branchName=master)
 [![NuGet](https://img.shields.io/nuget/v/ExtendedWPFVisualTreeHelper.svg)](https://www.nuget.org/packages/ExtendedWPFVisualTreeHelper)
 [![Issues](https://img.shields.io/github/issues/davidlebourdais/ExtendedWPFVisualTreeHelper.svg)](https://github.com/davidlebourdais/ExtendedWPFVisualTreeHelper/issues)
 
