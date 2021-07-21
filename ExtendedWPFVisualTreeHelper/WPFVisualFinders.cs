@@ -13,7 +13,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
     /// Provides a set of helpers to navigate a visual tree and either find 
     /// a specific child or parent of a dependency object.
     /// </summary>
-    public static class WPFVisualFinders
+    public static class WpfVisualFinders
     {
         #region Find children
         /// <summary>
@@ -34,7 +34,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
             if (node is Visual || node is Visual3D)
             {
                 var childrenCount = VisualTreeHelper.GetChildrenCount(node);
-                for (int i = 0; i < childrenCount; i++)
+                for (var i = 0; i < childrenCount; i++)
                 {
                     var child = VisualTreeHelper.GetChild(node, i);
 

@@ -9,7 +9,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
     /// Provides a set of extensions on <see cref="DependencyObject"/> to navigate a visual tree 
     /// and either find a specific descendant or ancestor.
     /// </summary>
-    public static class WPFVisualFindersExtensions
+    public static class WpfVisualFindersExtensions
     {
         #region Find children
         /// <summary>
@@ -25,7 +25,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type. </remarks>
         public static T FindChild<T>(this DependencyObject node, string name = null, bool allowContentElements = true)
         {
-            return WPFVisualFinders.FindChild<T>(node, name, allowContentElements);
+            return WpfVisualFinders.FindChild<T>(node, name, allowContentElements);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <returns>A matching child, or null if none existing.</returns>
         public static DependencyObject FindChildByType(this DependencyObject node, Type type, string name = null, bool allowContentElements = true)
         {
-            return WPFVisualFinders.FindChildByType(node, type, name, allowContentElements);
+            return WpfVisualFinders.FindChildByType(node, type, name, allowContentElements);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <returns>A matching child, or default if none existing in the direct path.</returns>
         public static T FindDirectChild<T>(this DependencyObject node, string name = null, bool allowContentElements = true)
         {
-            return WPFVisualFinders.FindDirectChild<T>(node, name, allowContentElements);
+            return WpfVisualFinders.FindDirectChild<T>(node, name, allowContentElements);
         }
         
         /// <summary>
@@ -76,7 +76,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <returns>A matching child, or null if none existing in the direct path.</returns>
         public static DependencyObject FindDirectChildByType(this DependencyObject node, Type type, string name = null, bool allowContentElements = true)
         {
-            return WPFVisualFinders.FindDirectChildByType(node, type, name, allowContentElements);
+            return WpfVisualFinders.FindDirectChildByType(node, type, name, allowContentElements);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// and https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type. </remarks>
         public static IEnumerable<T> FindAllChildren<T>(this DependencyObject node, string name = null, bool allowContentElements = true)
         {
-            return WPFVisualFinders.FindAllChildren<T>(node, name, allowContentElements);
+            return WpfVisualFinders.FindAllChildren<T>(node, name, allowContentElements);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <returns>All found children elements that match passed type.</returns>
         public static IEnumerable<DependencyObject> FindAllChildrenByType(this DependencyObject node, Type type, string name = null, bool allowContentElements = true)
         {
-            return WPFVisualFinders.FindAllChildrenByType(node, type, name, allowContentElements);
+            return WpfVisualFinders.FindAllChildrenByType(node, type, name, allowContentElements);
         }
         #endregion
 
@@ -125,7 +125,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <returns>The matching parent, or null if none.</returns>
         public static T FindParent<T>(this DependencyObject node, string name = null, bool allowContentElements = true)
         {
-            return WPFVisualFinders.FindParent<T>(node, name, allowContentElements);
+            return WpfVisualFinders.FindParent<T>(node, name, allowContentElements);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <returns>The matching parent, or null if none.</returns>
         public static DependencyObject FindParentByType(this DependencyObject node, Type type, string name = null, bool allowContentElements = true)
         {
-             return WPFVisualFinders.FindParentByType(node, type, name, allowContentElements);
+             return WpfVisualFinders.FindParentByType(node, type, name, allowContentElements);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <returns>The parent at given ancestry level, or null if none found at that level.</returns>
         public static DependencyObject FindParentByLevel(this DependencyObject node, int level = 1, bool allowContentElements = true)
         {
-            return WPFVisualFinders.FindParentByLevel(node, level, allowContentElements);
+            return WpfVisualFinders.FindParentByLevel(node, level, allowContentElements);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent. </remarks>
         public static DependencyObject GetParentExtended(this DependencyObject node)
         {
-            return WPFVisualFinders.GetParentExtended(node);
+            return WpfVisualFinders.GetParentExtended(node);
         }
         #endregion
     }

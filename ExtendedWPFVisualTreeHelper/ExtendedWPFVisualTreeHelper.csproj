@@ -6,7 +6,7 @@
     <PackageDescription>A compilation of useful WPF visual tree helper methods.</PackageDescription>
     <PackageTags>WPF;Visual Tree;VisualTreeHelper</PackageTags>
     <UseWPF>true</UseWPF>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
     <Authors>David Le Bourdais</Authors>
     <Copyright>Copyright © 2019-2020</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

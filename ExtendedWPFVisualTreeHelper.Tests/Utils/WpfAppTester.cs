@@ -12,7 +12,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests.Utils
     /// <summary>
     /// Offers ways to run a test from a dedicated <see cref="Window"/>.
     /// </summary>
-    public static class WPFAppTester
+    public static class WpfAppTester
     {
         /// <summary>
         /// Parses a Xaml content.
@@ -31,9 +31,9 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests.Utils
         /// </summary>
         /// <param name="testMethod">Test method to be invoked. The window content will be injected as <see cref="FrameworkElement"/> parameter.</param>
         /// <param name="windowContent">Content of the window, should be a raw Xaml content as string or a valid content for the window.</param>
-        /// <param name="hide_window">Optionally shows generated window for the tests.</param>
-        /// <param name="timeout_ms">Optionally sets a timeout in milliseconds to be triggered for abnormally pending tests.</param>
-        public static void RunTestInWindow(Action<FrameworkElement> testMethod, object windowContent, bool show_window = false, int timeout_ms = 200000)
+        /// <param name="showWindow">Optionally shows generated window for the tests.</param>
+        /// <param name="timeoutMs">Optionally sets a timeout in milliseconds to be triggered for abnormally pending tests.</param>
+        public static void RunTestInWindow(Action<FrameworkElement> testMethod, object windowContent, bool showWindow = false, int timeoutMs = 200000)
         {
             var exceptionInfo = (ExceptionDispatchInfo)null;
 
@@ -45,7 +45,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests.Utils
                     Content = windowContent is string xaml ? LoadFromXaml(xaml) : windowContent
                 };
 
-                if (!show_window)
+                if (!showWindow)
                 {
                     window.Height = window.Width = 0;
                     window.ShowInTaskbar = false;
@@ -57,7 +57,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests.Utils
                 {
                     try
                     {
-                        testMethod.Invoke((FrameworkElement)window);
+                        testMethod.Invoke(window);
                     }
                     catch (Exception e) // register any exception during test execution
                     {
@@ -76,7 +76,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests.Utils
             testThread.Start();
 
             // Timeout if worker is not ending quickly enough:
-            var joined = testThread.Join(TimeSpan.FromMilliseconds(timeout_ms));
+            var joined = testThread.Join(TimeSpan.FromMilliseconds(timeoutMs));
             Assert.True(joined, "Test thread did not respond");
 
             // Rethrow exception caught in our worker if any: 

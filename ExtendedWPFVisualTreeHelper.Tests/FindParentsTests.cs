@@ -19,9 +19,9 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var hasContentElementInPath = TestData.HasContentElementWithin(xaml);
 
                 // Build generic methods manually, since the type to seek might change for each data set:
-                var methodInfo = typeof(WPFVisualFinders).GetMethod("FindParent");
+                var methodInfo = typeof(WpfVisualFinders).GetMethod("FindParent");
                 var method = methodInfo?.MakeGenericMethod(expected.GetType());
-                var extMethodInfo = typeof(WPFVisualFindersExtensions).GetMethod("FindParent");
+                var extMethodInfo = typeof(WpfVisualFindersExtensions).GetMethod("FindParent");
                 var extMethod = extMethodInfo?.MakeGenericMethod(expected.GetType());
 
                 // Test unnamed:
@@ -56,7 +56,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 Assert.Same(namedResult, regexExtensionResult);
             }
 
-            WPFAppTester.RunTestInWindow(Inspect, xaml);
+            WpfAppTester.RunTestInWindow(Inspect, xaml);
         }
         #endregion
 
@@ -73,7 +73,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var hasContentElementInPath = TestData.HasContentElementWithin(xaml);
 
                 // Test unnamed:
-                var result = WPFVisualFinders.FindParentByType(origin, expected.GetType(), allowContentElements: allowContentElements);
+                var result = WpfVisualFinders.FindParentByType(origin, expected.GetType(), allowContentElements: allowContentElements);
                 if (relatedInPath && (allowContentElements || !hasContentElementInPath))
                 {
                     if (!hasSimilarTypeInPath) // should find destination if not caught a similar type.
@@ -88,13 +88,13 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 Assert.Same(result, extensionResult);
 
                 // Test named:
-                var namedResult = WPFVisualFinders.FindParentByType(origin, expected.GetType(), "End", allowContentElements);
+                var namedResult = WpfVisualFinders.FindParentByType(origin, expected.GetType(), "End", allowContentElements);
                 if (relatedInPath && (allowContentElements || !hasContentElementInPath)) // should always find if related in path
                     Assert.Same(expected, namedResult);
                 else Assert.Null(result);
 
                 // Test with regex:
-                var regexResult = WPFVisualFinders.FindParentByType(origin, expected.GetType(), @"E[a-z]\D{1}", allowContentElements);
+                var regexResult = WpfVisualFinders.FindParentByType(origin, expected.GetType(), @"E[a-z]\D{1}", allowContentElements);
                 Assert.Same(namedResult, regexResult);
 
                 // Test extension method with named target and regex:
@@ -104,7 +104,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 Assert.Same(namedResult, regexExtensionResult);
             }
 
-            WPFAppTester.RunTestInWindow(Inspect, xaml);
+            WpfAppTester.RunTestInWindow(Inspect, xaml);
         }
         #endregion
 
@@ -123,7 +123,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var hasContentElementInPath = TestData.HasContentElementWithin(xaml);
 
                 // Test bare method:
-                var result = WPFVisualFinders.FindParentByLevel(origin, level, allowContentElements);
+                var result = WpfVisualFinders.FindParentByLevel(origin, level, allowContentElements);
                 if (relatedInPath && (allowContentElements || !hasContentElementInPath))
                     Assert.Equal(expected, result);
                 else Assert.NotEqual(expected, result); // may find something close but not our target.
@@ -133,7 +133,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 Assert.Same(result, extensionResult);
             }
 
-            WPFAppTester.RunTestInWindow(Inspect, xaml);
+            WpfAppTester.RunTestInWindow(Inspect, xaml);
         }
         #endregion
 
@@ -155,7 +155,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 do
                 {
                     var currentNode = parent;
-                    parent =  WPFVisualFinders.GetParentExtended(currentNode);
+                    parent =  WpfVisualFinders.GetParentExtended(currentNode);
 
                     var parentExt = currentNode.GetParentExtended();
                     Assert.Equal(parent, parentExt);
@@ -167,7 +167,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 Assert.Equal(relatedInPath, foundExpected);
             }
 
-            WPFAppTester.RunTestInWindow(Inspect, xaml);
+            WpfAppTester.RunTestInWindow(Inspect, xaml);
         }
         #endregion
     }
