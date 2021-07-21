@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net451</TargetFrameworks>
+    <TargetFrameworks>net451;net5.0-windows;netcoreapp3.1</TargetFrameworks>
     <PackageId>ExtendedWPFVisualTreeHelper</PackageId>
     <Title>Extended WPF Visual Tree helper</Title>
     <PackageDescription>A compilation of useful WPF visual tree helper methods.</PackageDescription>

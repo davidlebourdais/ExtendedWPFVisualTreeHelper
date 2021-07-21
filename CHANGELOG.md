@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.2
+Updated to .NET 5
+
 ## v2.0.1
 Updated minimum .Net Core version and package info for better visibility in Nuget feeds.
 
