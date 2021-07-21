@@ -1,6 +1,6 @@
-
 using Xunit;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace EMA.ExtendedWPFVisualTreeHelper.Tests
 {
@@ -14,14 +14,14 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
     {
         #region Data
         // This contains a XAML representation of Dependency objects to travel through
-        // Contains: items nammed 'A' and 'B' which are potential source/destination that are linked (can travel from parent to child and vice-versa).
+        // Contains: items named 'A' and 'B' which are potential source/destination that are linked (can travel from parent to child and vice-versa).
         // May contain: 
-        // - items nammed 'Similar' that represents a type to be encountered twice during travelling from A to B,
-        // - items nammed 'SameSibling' that represents a similar type to A or B to be encountered among their direct siblings,
-        // - items nammed 'ContentElementHolder' that clearly represents items holding a ContentElement within, which are special to travel through.
-        // - items nammed 'C' which are aimed to be replaced in order to create a secondary 'end' point.
+        // - items named 'Similar' that represents a type to be encountered twice during travelling from A to B,
+        // - items named 'SameSibling' that represents a similar type to A or B to be encountered among their direct siblings,
+        // - items named 'ContentElementHolder' that clearly represents items holding a ContentElement within, which are special to travel through.
+        // - items named 'C' which are aimed to be replaced in order to create a secondary 'end' point.
         // Keep in mind that names cannot be reproduced in the xaml' scope, except if defined in a template. 'A', 'B', 'C' must be unique in xaml's scope.
-        private readonly List<string> xaml_valid_test_data = new List<string>() {
+        private readonly List<string> _xamlValidTestData = new List<string>() {
             "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Name=\"A\" >" +
                 "<TextBlock Name=\"B\" />" +
             "</Border>",
@@ -110,7 +110,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
 
         // Contains a set of data that will always lead to failure as elements 
         // are not related with each other in path:
-        private readonly List<string> xaml_invalid_test_data = new List<string>() {
+        private readonly List<string> _xamlInvalidTestData = new List<string>() {
             "<ComboBox xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">" +
                 "<ComboBoxItem Name=\"A\" />" +
                 "<ComboBoxItem Name=\"B\" />" +
@@ -136,50 +136,50 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
         /// Checks if a <see cref="ContentElement"/> might be encountered
         /// when travelling from start node to last one.
         /// </summary>
-        /// <param name="raw_xaml">Xaml as string to be inspected.</param>
+        /// <param name="rawXaml">Xaml as string to be inspected.</param>
         /// <returns>True if there is a <see cref="ContentElement"/> to be encountered.</returns>
-        public static bool HasContentElementWithin(string raw_xaml)
-            => raw_xaml.Contains("\"ContentElementHolder"); // can be suffixed (ex: 'ContentElementHolder2')
+        public static bool HasContentElementWithin(string rawXaml)
+            => rawXaml.Contains("\"ContentElementHolder"); // can be suffixed (ex: 'ContentElementHolder2')
 
         /// <summary>
         /// Checks if a type similar to the start or end node will be found 
         /// when travelling from start to end and vice-versa.
         /// </summary>
-        /// <param name="raw_xaml">Xaml as string to be inspected.</param>
+        /// <param name="rawXaml">Xaml as string to be inspected.</param>
         /// <returns>True if there is an object of similar type to be encountered.</returns>
-        public static bool HasSimilarTypeInDirectPath(string raw_xaml)
-            => raw_xaml.Contains("\"Similar"); // can be suffixed (ex: 'Similar2')
+        public static bool HasSimilarTypeInDirectPath(string rawXaml)
+            => rawXaml.Contains("\"Similar"); // can be suffixed (ex: 'Similar2')
 
         /// <summary>
         /// Checks if a type similar to the start or end node will be found 
         /// when travelling from start to end and vice-versa and if any siblings
         /// at the start or end level has a similar type.
         /// </summary>
-        /// <param name="raw_xaml">Xaml as string to be inspected.</param>
+        /// <param name="rawXaml">Xaml as string to be inspected.</param>
         /// <returns>True if there is an object of similar type to be encountered.</returns>
-        public static bool HasSimilarTypeInDirectPathOrNearby(string raw_xaml)
-            => raw_xaml.Contains("\"Similar") || raw_xaml.Contains("\"SameSibling");
+        public static bool HasSimilarTypeInDirectPathOrNearby(string rawXaml)
+            => rawXaml.Contains("\"Similar") || rawXaml.Contains("\"SameSibling");
 
         /// <summary>
-        /// Sets end point on any elements nammed "C".
+        /// Sets end point on any elements named "C".
         /// </summary>
-        /// <param name="raw_xaml">Xaml as string to be modified.</param>
+        /// <param name="rawXaml">Xaml as string to be modified.</param>
         /// <returns>The raw xaml containing new end points if any predefined..</returns>
-        public static string SetMultipleEnd(string raw_xaml)
-            => raw_xaml.Replace("\"C\"", "\"End\"");
+        public static string SetMultipleEnd(string rawXaml)
+            => rawXaml.Replace("\"C\"", "\"End\"");
         #endregion
 
-        protected virtual string SetStartEnd(string raw_xaml)
-            => raw_xaml.Replace("\"A\"", "\"Start\"").Replace("\"B\"", "\"End\"");
-
+        protected virtual string SetStartEnd(string rawXaml)
+            => rawXaml.Replace("\"A\"", "\"Start\"").Replace("\"B\"", "\"End\"");
+        
         public TestData()
         {
-            foreach(var xaml in xaml_valid_test_data)
+            foreach(var xaml in _xamlValidTestData)
             {
                 Add(SetStartEnd(xaml), true, false);  // one without content elements.
                 Add(SetStartEnd(xaml), true, true);   // one with.
             }
-            foreach(var xaml in xaml_invalid_test_data)
+            foreach(var xaml in _xamlInvalidTestData)
             {
                 Add(SetStartEnd(xaml), false, false);
                 Add(SetStartEnd(xaml), false, true);

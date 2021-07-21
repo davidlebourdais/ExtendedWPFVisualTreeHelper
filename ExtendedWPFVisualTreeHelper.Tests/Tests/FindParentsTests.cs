@@ -9,165 +9,165 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
         #region FindParent
         [Theory]
         [ClassData(typeof(InvertedTestData))]
-        public void CanFindParent(string xaml, bool related_in_path, bool allow_content_elements)
+        public void CanFindParent(string xaml, bool relatedInPath, bool allowContentElements)
         {
-            void inspect(FrameworkElement tree)
+            void Inspect(FrameworkElement tree)
             {
                 var origin = TreeHelpers.FindElementByName(tree, "Start");
                 var expected = TreeHelpers.FindElementByName(tree, "End");
-                var has_similar_type_in_path = TestData.HasSimilarTypeInDirectPath(xaml);
-                var has_content_element_in_path = TestData.HasContentElementWithin(xaml);
+                var hasSimilarTypeInPath = TestData.HasSimilarTypeInDirectPath(xaml);
+                var hasContentElementInPath = TestData.HasContentElementWithin(xaml);
 
-                // Build generic methods manualy, since the type to seek might change for each data set:
+                // Build generic methods manually, since the type to seek might change for each data set:
                 var methodInfo = typeof(WPFVisualFinders).GetMethod("FindParent");
-                var method = methodInfo.MakeGenericMethod(expected.GetType());
+                var method = methodInfo?.MakeGenericMethod(expected.GetType());
                 var extMethodInfo = typeof(WPFVisualFindersExtensions).GetMethod("FindParent");
-                var extMethod = extMethodInfo.MakeGenericMethod(expected.GetType());
+                var extMethod = extMethodInfo?.MakeGenericMethod(expected.GetType());
 
-                // Test unnammed:
-                var result = method.Invoke(null, new object[] { origin, null, allow_content_elements });
-                if (related_in_path && (allow_content_elements || !has_content_element_in_path))
+                // Test unnamed:
+                var result = method?.Invoke(null, new object[] { origin, null, allowContentElements });
+                if (relatedInPath && (allowContentElements || !hasContentElementInPath))
                 {
-                    if (!has_similar_type_in_path) // should find destination if not caught a similar type.
+                    if (!hasSimilarTypeInPath) // should find destination if not caught a similar type.
                         Assert.Same(expected, result);
                     else  // here if caught an intermediary node
                         Assert.Equal(expected?.GetType(), result?.GetType());
                 }
                 else Assert.Null(result);
 
-                // Test extension method with unnammed target:
-                var extresult = extMethod.Invoke(origin, new object[] { origin, null, allow_content_elements });
-                Assert.Same(result, extresult);
+                // Test extension method with unnamed target:
+                var extensionResult = extMethod?.Invoke(origin, new object[] { origin, null, allowContentElements });
+                Assert.Same(result, extensionResult);
 
-                // Test nammed:
-                var nammed_result = method.Invoke(null, new object[] { origin, "End", allow_content_elements });
-                if (related_in_path && (allow_content_elements || !has_content_element_in_path)) // should always find if related in path
-                    Assert.Same(expected, nammed_result);
+                // Test named:
+                var namedResult = method?.Invoke(null, new object[] { origin, "End", allowContentElements });
+                if (relatedInPath && (allowContentElements || !hasContentElementInPath)) // should always find if related in path
+                    Assert.Same(expected, namedResult);
                 else Assert.Null(result);
 
                 // Test with regex:
-                var regex_result = method.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allow_content_elements });
-                Assert.Same(nammed_result, regex_result);
+                var regexResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements });
+                Assert.Same(namedResult, regexResult);
 
-                // Test extension method with nammed target and regex:
-                var nammed_extresult = extMethod.Invoke(null, new object[] { origin, "End", allow_content_elements });
-                var regex_extresult = method.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allow_content_elements });
-                Assert.Same(nammed_result, nammed_extresult);
-                Assert.Same(nammed_result, regex_extresult);
+                // Test extension method with named target and regex:
+                var namedExtensionResult = extMethod?.Invoke(null, new object[] { origin, "End", allowContentElements });
+                var regexExtensionResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements });
+                Assert.Same(namedResult, namedExtensionResult);
+                Assert.Same(namedResult, regexExtensionResult);
             }
 
-            WPFAppTester.RunTestInWindow(inspect, xaml);
+            WPFAppTester.RunTestInWindow(Inspect, xaml);
         }
         #endregion
 
         #region FindParentByType
         [Theory]
         [ClassData(typeof(InvertedTestData))]
-        public void CanFindParentByType(string xaml, bool related_in_path, bool allow_content_elements)
+        public void CanFindParentByType(string xaml, bool relatedInPath, bool allowContentElements)
         {
-            void inspect(FrameworkElement tree)
+            void Inspect(FrameworkElement tree)
             {
                 var origin = TreeHelpers.FindElementByName(tree, "Start");
                 var expected = TreeHelpers.FindElementByName(tree, "End");
-                var has_similar_type_in_path = TestData.HasSimilarTypeInDirectPath(xaml);
-                var has_content_element_in_path = TestData.HasContentElementWithin(xaml);
+                var hasSimilarTypeInPath = TestData.HasSimilarTypeInDirectPath(xaml);
+                var hasContentElementInPath = TestData.HasContentElementWithin(xaml);
 
-                // Test unnammed:
-                var result = WPFVisualFinders.FindParentByType(origin, expected.GetType(), allow_content_elements: allow_content_elements);
-                if (related_in_path && (allow_content_elements || !has_content_element_in_path))
+                // Test unnamed:
+                var result = WPFVisualFinders.FindParentByType(origin, expected.GetType(), allowContentElements: allowContentElements);
+                if (relatedInPath && (allowContentElements || !hasContentElementInPath))
                 {
-                    if (!has_similar_type_in_path) // should find destination if not caught a similar type.
+                    if (!hasSimilarTypeInPath) // should find destination if not caught a similar type.
                         Assert.Same(expected, result);
                     else  // here if caught an intermediary node
-                        Assert.Equal(expected?.GetType(), result?.GetType());
+                        Assert.Equal(expected.GetType(), result?.GetType());
                 }
                 else Assert.Null(result);
 
-                // Test extension method with unnammed target:
-                var extresult = origin.FindParentByType(expected.GetType(), allow_content_elements: allow_content_elements);
-                Assert.Same(result, extresult);
+                // Test extension method with unnamed target:
+                var extensionResult = origin.FindParentByType(expected.GetType(), allowContentElements: allowContentElements);
+                Assert.Same(result, extensionResult);
 
-                // Test nammed:
-                var nammed_result = WPFVisualFinders.FindParentByType(origin, expected.GetType(), "End", allow_content_elements);
-                if (related_in_path && (allow_content_elements || !has_content_element_in_path)) // should always find if related in path
-                    Assert.Same(expected, nammed_result);
+                // Test named:
+                var namedResult = WPFVisualFinders.FindParentByType(origin, expected.GetType(), "End", allowContentElements);
+                if (relatedInPath && (allowContentElements || !hasContentElementInPath)) // should always find if related in path
+                    Assert.Same(expected, namedResult);
                 else Assert.Null(result);
 
                 // Test with regex:
-                var regex_result = WPFVisualFinders.FindParentByType(origin, expected.GetType(), @"E[a-z]\D{1}", allow_content_elements);
-                Assert.Same(nammed_result, regex_result);
+                var regexResult = WPFVisualFinders.FindParentByType(origin, expected.GetType(), @"E[a-z]\D{1}", allowContentElements);
+                Assert.Same(namedResult, regexResult);
 
-                // Test extension method with nammed target and regex:
-                var nammed_extresult = origin.FindParentByType(expected.GetType(), "End", allow_content_elements);
-                var regex_extresult = origin.FindParentByType(expected.GetType(), @"E[a-z]\D{1}", allow_content_elements);
-                Assert.Same(nammed_result, nammed_extresult);
-                Assert.Same(nammed_result, regex_extresult);
+                // Test extension method with named target and regex:
+                var namedExtensionResult = origin.FindParentByType(expected.GetType(), "End", allowContentElements);
+                var regexExtensionResult = origin.FindParentByType(expected.GetType(), @"E[a-z]\D{1}", allowContentElements);
+                Assert.Same(namedResult, namedExtensionResult);
+                Assert.Same(namedResult, regexExtensionResult);
             }
 
-            WPFAppTester.RunTestInWindow(inspect, xaml);
+            WPFAppTester.RunTestInWindow(Inspect, xaml);
         }
         #endregion
 
         #region FindParentByLevel
         [Theory]
         [ClassData(typeof(InvertedTestData))]
-        public void CanFindParentByLevel(string xaml, bool related_in_path, bool allow_content_elements)
+        public void CanFindParentByLevel(string xaml, bool relatedInPath, bool allowContentElements)
         {
-            void inspect(FrameworkElement tree)
+            void Inspect(FrameworkElement tree)
             {
                 var origin = TreeHelpers.FindElementByName(tree, "Start");
-                var origin_depth = TreeHelpers.GetElementDepthByName(tree, "Start", allow_content_elements);
+                var originDepth = TreeHelpers.GetElementDepthByName(tree, "Start", allowContentElements);
                 var expected = TreeHelpers.FindElementByName(tree, "End");
-                var expected_depth = TreeHelpers.GetElementDepthByName(tree, "End", allow_content_elements);
-                var level = origin_depth - expected_depth;
-                var has_content_element_in_path = TestData.HasContentElementWithin(xaml);
+                var expectedDepth = TreeHelpers.GetElementDepthByName(tree, "End", allowContentElements);
+                var level = originDepth - expectedDepth;
+                var hasContentElementInPath = TestData.HasContentElementWithin(xaml);
 
                 // Test bare method:
-                var result = WPFVisualFinders.FindParentByLevel(origin, level, allow_content_elements);
-                if (related_in_path && (allow_content_elements || !has_content_element_in_path))
+                var result = WPFVisualFinders.FindParentByLevel(origin, level, allowContentElements);
+                if (relatedInPath && (allowContentElements || !hasContentElementInPath))
                     Assert.Equal(expected, result);
                 else Assert.NotEqual(expected, result); // may find something close but not our target.
 
                 // Test extension method:
-                var extresult = origin.FindParentByLevel(level, allow_content_elements);
-                Assert.Same(result, extresult);
+                var extensionResult = origin.FindParentByLevel(level, allowContentElements);
+                Assert.Same(result, extensionResult);
             }
 
-            WPFAppTester.RunTestInWindow(inspect, xaml);
+            WPFAppTester.RunTestInWindow(Inspect, xaml);
         }
         #endregion
 
         #region GetParentExtended
         [Theory]
         [ClassData(typeof(InvertedTestData))]
-        public void CanGetParentExtended(string xaml, bool related_in_path, bool allow_content_elements)
+        public void CanGetParentExtended(string xaml, bool relatedInPath, bool allowContentElements)
         {
-            void inspect(FrameworkElement tree)
+            void Inspect(FrameworkElement tree)
             {
-                if (!allow_content_elements) return; // same result if activated or not.
+                if (!allowContentElements) return; // same result if activated or not.
 
                 var origin = TreeHelpers.FindElementByName(tree, "Start");
                 var expected = TreeHelpers.FindElementByName(tree, "End");
 
                 // Run up until reaching top:
                 var parent = origin;
-                var found_expected = false;
+                var foundExpected = false;
                 do
                 {
-                    var current_node = parent;
-                    parent =  WPFVisualFinders.GetParentExtended(current_node) as DependencyObject;
+                    var currentNode = parent;
+                    parent =  WPFVisualFinders.GetParentExtended(currentNode);
 
-                    var parent_ext = current_node.GetParentExtended() as DependencyObject;
-                    Assert.Equal(parent, parent_ext);
+                    var parentExt = currentNode.GetParentExtended();
+                    Assert.Equal(parent, parentExt);
 
                     if (expected.Equals(parent))
-                        found_expected = true;
+                        foundExpected = true;
                 } while (parent != null);
 
-                Assert.Equal(related_in_path, found_expected);
+                Assert.Equal(relatedInPath, foundExpected);
             }
 
-            WPFAppTester.RunTestInWindow(inspect, xaml);
+            WPFAppTester.RunTestInWindow(Inspect, xaml);
         }
         #endregion
     }
