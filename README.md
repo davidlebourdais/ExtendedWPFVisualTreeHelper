@@ -1,4 +1,4 @@
-# WPF Visual Tree Helper
+# WPF Visual Tree Helper extension
 
 [![Build Status](https://dev.azure.com/davidlebourdais/ExtendedWPFVisualTreeHelper/_apis/build/status/davidlebourdais.ExtendedWPFVisualTreeHelper?branchName=master)](https://dev.azure.com/davidlebourdais/ExtendedWPFVisualTreeHelper/_build/latest?definitionId=11&branchName=master)
 [![NuGet](https://img.shields.io/nuget/v/ExtendedWPFVisualTreeHelper.svg)](https://www.nuget.org/packages/ExtendedWPFVisualTreeHelper)
@@ -12,7 +12,7 @@ Goes beyond framework's VisualTreeHelper [GetParent](https://docs.microsoft.com/
 
  - Use 'FindParent' methods to travel the visual tree up and 'FindChildren' methods to walk it down
  - Use either static helpers or extension methods:
-	 - ex: *WPFVisualFinders.FindParent(node)* or *node.FindParent()*
+	 - ex: *WpfVisualFinders.FindParent(node)* or *node.FindParent()*
  - Most searches target a specific type and optionally a name or a regex filter:
 	 - Type can be given at compile time, or at runtime using the 'ByType' methods 
 		 - ex: *FindParent{MyType}(node)* vs *FindParentByType(node, myTypeInstance)*
@@ -26,23 +26,23 @@ Goes beyond framework's VisualTreeHelper [GetParent](https://docs.microsoft.com/
 ### FindChild & FindChildByType
 Finds a child of the specified type by walking down the visual tree from the passed node. Every leaves are explored until matching child is found.
 
-    T FindChild<T>(DependencyObject node, string name = null, bool allow_content_elements = true)
+    T FindChild<T>(DependencyObject node, string name = null, bool allowContentElements = true)
 
-    DependencyObject FindChildByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+    DependencyObject FindChildByType(DependencyObject node, Type type, string name = null, bool allowContentElements = true)
 
 ### FindDirectChild & FindDirectChildByType
 Finds a child of a specific type by walking down the visual tree from the passed node and through first encountered children only. Search is stopped when a matching item is found or when the most accessible leaf is reached.
 
-    T FindDirectChild<T>(DependencyObject node, string name = null, bool allow_content_elements = true)
+    T FindDirectChild<T>(DependencyObject node, string name = null, bool allowContentElements = true)
 
-    DependencyObject FindDirectChild(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+    DependencyObject FindDirectChildByType(DependencyObject node, Type type, string name = null, bool allowContentElements = true)
 
 ### FindAllChildren & FindAllChildrenByType
 Builds up an enumerable of all passed node's descendants that match target type and optional name or regex. Looks at every paths from top node.
 
-    IEnumerable<T> FindAllChildren<T>(DependencyObject node, string name = null, bool allow_content_elements = true)
+    IEnumerable<T> FindAllChildren<T>(DependencyObject node, string name = null, bool allowContentElements = true)
 
-    IEnumerable<DependencyObject> FindAllChildrenByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+    IEnumerable<DependencyObject> FindAllChildrenByType(DependencyObject node, Type type, string name = null, bool allowContentElements = true)
 
 **Note**
 This method explores and exposes the matching children level-by-level rather than branch-by-branch. Thus, all matching children are exposed, then all matching grandchildren, then all matching grand-grandchildren, etc.
@@ -50,14 +50,14 @@ This method explores and exposes the matching children level-by-level rather tha
 ### FindParent & FindParentByType
 Finds first parent that matches specified type and optional name or regex by walking up the visual tree from the passed node. Returns null after tree top is reached with no result.
 
-    T FindParent<T>(DependencyObject node, string name = null, bool allow_content_elements = true)
+    T FindParent<T>(DependencyObject node, string name = null, bool allowContentElements = true)
 
-    DependencyObject FindParentByType(DependencyObject node, Type type, string name = null, bool allow_content_elements = true)
+    DependencyObject FindParentByType(DependencyObject node, Type type, string name = null, bool allowContentElements = true)
 
 ### FindParentByLevel
 Finds parent taken at a given depth level from the passed node. Returns null if level to cross if too large or if cannot walk the tree up at some point.
 
-    DependencyObject FindParentByLevel(DependencyObject node, int level = 1, bool allow_content_elements = true)
+    DependencyObject FindParentByLevel(DependencyObject node, int level = 1, bool allowContentElements = true)
 
 **Note**
 When level defaults to 1, the method gets the immediate parent.
@@ -73,7 +73,7 @@ An extension of the [VisualTreeHelper.GetParent()](https://docs.microsoft.com/en
 All these reasons make them important nodes to find or travel through while exploring the visual tree, although they are not part of it. As a consequence: 
 
 > All provided methods allows [ContentElement](https://docs.microsoft.com/en-us/dotnet/api/system.windows.contentelemen) traversal by default. 
-> This feature can disabled by setting **allow_content_elements = false** on any method call.
+> This feature can disabled by setting **allowContentElements = false** on any method call.
 
 Some ContentElement examples:
 - [ColumnDefinition](https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.columndefinition?view=netcore-3.1)
