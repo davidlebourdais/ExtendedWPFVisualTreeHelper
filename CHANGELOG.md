@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.3
+Updated to .NET 9
+
 ## v2.0.2
 Updated to .NET 5
 Breaking changes: WPFVisualFinders -> WpfVisualFinders and WPFVisualFindersExtensions -> WpfVisualFindersExtensions
