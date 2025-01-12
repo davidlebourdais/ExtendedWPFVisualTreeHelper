@@ -53,7 +53,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests.Utils
                 }
 
                 // Once window with our content is loaded, execute test:
-                window.Loaded += (sender, args) =>
+                window.Loaded += (_, _) =>
                 {
                     try
                     {

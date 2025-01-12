@@ -38,7 +38,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                 {
                     var child = VisualTreeHelper.GetChild(node, i);
 
-                    // If the child if of the requested type:
+                    // If the child is of the requested type:
                     if (child is T casted)
                     {
                         if (!string.IsNullOrEmpty(name)) // if the child's name is set for search
@@ -60,7 +60,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                 var children = LogicalTreeHelper.GetChildren(node).OfType<ContentElement>();
                 foreach (var child in children)
                 {
-                    // If the child if of the requested type:
+                    // If the child is of the requested type:
                     if (child is T casted)
                     {
                         if (!string.IsNullOrEmpty(name)) // if the child's name is set for search
@@ -101,8 +101,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                 {
                     var child = VisualTreeHelper.GetChild(node, i);
 
-                    // If the child if of the requested type:
-                    if ((child.GetType().Equals(type) || child.GetType().GetTypeInfo().IsSubclassOf(type)))
+                    // If the child is of the requested type:
+                    if (child.GetType().Equals(type) || child.GetType().GetTypeInfo().IsSubclassOf(type))
                     {
                         if (!string.IsNullOrEmpty(name)) // if the child's name is set for search
                         {
@@ -123,8 +123,8 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                 var children = LogicalTreeHelper.GetChildren(node).OfType<ContentElement>();
                 foreach (var child in children)
                 {
-                    // If the child if of the requested type:
-                    if ((child.GetType().Equals(type) || child.GetType().GetTypeInfo().IsSubclassOf(type)))
+                    // If the child is of the requested type:
+                    if (child.GetType().Equals(type) || child.GetType().GetTypeInfo().IsSubclassOf(type))
                     {
                         if (!string.IsNullOrEmpty(name)) // if the child's name is set for search
                         {
@@ -312,7 +312,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                     for (var i = 0; i < VisualTreeHelper.GetChildrenCount(toProcess); i++)
                     {
                         var child = VisualTreeHelper.GetChild(toProcess, i);
-                        if ((child.GetType().Equals(type) || child.GetType().GetTypeInfo().IsSubclassOf(type)))
+                        if (child.GetType().Equals(type) || child.GetType().GetTypeInfo().IsSubclassOf(type))
                             if (string.IsNullOrEmpty(name) || CheckNameMatch(child, name))
                                 yield return child;
 
@@ -325,7 +325,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                     var children = LogicalTreeHelper.GetChildren(toProcess).OfType<ContentElement>();
                     foreach (var child in children)
                     {
-                        if ((child.GetType().Equals(type) || child.GetType().GetTypeInfo().IsSubclassOf(type)))
+                        if (child.GetType().Equals(type) || child.GetType().GetTypeInfo().IsSubclassOf(type))
                             if (string.IsNullOrEmpty(name) || CheckNameMatch(child, name))
                                 yield return child;
                         if (child is DependencyObject castedDo)
@@ -350,7 +350,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         public static T FindParent<T>(DependencyObject node, string name = null, bool allowContentElements = true)
         {
             // Get parent:
-            var parent = allowContentElements ? GetParentExtended(node) : (node is Visual || node is Visual3D) ? VisualTreeHelper.GetParent(node) : null;
+            var parent = allowContentElements ? GetParentExtended(node) : node is Visual || node is Visual3D ? VisualTreeHelper.GetParent(node) : null;
             if (parent == null) return default;  // reached tree top.
 
             if (parent is T casted)
@@ -376,10 +376,10 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         public static DependencyObject FindParentByType(DependencyObject node, Type type, string name = null, bool allowContentElements = true)
         {
             // Get parent:
-            var parent = allowContentElements ? GetParentExtended(node) : (node is Visual || node is Visual3D) ? VisualTreeHelper.GetParent(node) : null;
+            var parent = allowContentElements ? GetParentExtended(node) : node is Visual || node is Visual3D ? VisualTreeHelper.GetParent(node) : null;
             if (parent == null) return default;  // reached tree top.
 
-            if ((parent.GetType()).Equals(type) || (parent.GetType().GetTypeInfo().IsSubclassOf(type)))
+            if (parent.GetType().Equals(type) || parent.GetType().GetTypeInfo().IsSubclassOf(type))
             {
                 if (!string.IsNullOrEmpty(name))  // case where search by name is enabled.
                     return CheckNameMatch(parent, name) ? parent : FindParentByType(parent, type, name, allowContentElements);
@@ -394,7 +394,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <see cref="ContentElement"/> objects while walking up the visual tree.
         /// </summary>
         /// <param name="node">The node where to start looking from.</param>
-        /// <param name="level">The ancestry level the parent is at regarding to passed node.</param>
+        /// <param name="level">The ancestry level the parent is at regarding passed node.</param>
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The parent at given ancestry level, or null if none found at that level.</returns>
@@ -404,7 +404,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
             var currentLevel = 0;
 
             while (currentLevel++ < level && node != null)
-                node = allowContentElements ? GetParentExtended(node) : (node is Visual || node is Visual3D) ? VisualTreeHelper.GetParent(node) : null;
+                node = allowContentElements ? GetParentExtended(node) : node is Visual || node is Visual3D ? VisualTreeHelper.GetParent(node) : null;
 
             return node;
         }
@@ -430,7 +430,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
                 return fce?.Parent;
             }
 
-            // Also try searching for parent in framework elements (such as DockPanel, etc):
+            // Also try searching for parent in framework elements (such as DockPanel, etc.):
             if (node is FrameworkElement frameworkElement && frameworkElement.Parent != null)
                 return frameworkElement.Parent;
 

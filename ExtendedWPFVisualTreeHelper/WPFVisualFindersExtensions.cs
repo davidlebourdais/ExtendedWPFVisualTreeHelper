@@ -148,7 +148,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <see cref="ContentElement"/> objects while walking up the visual tree.
         /// </summary>
         /// <param name="node">The node where to start looking from.</param>
-        /// <param name="level">The ancestry level the parent is at regarding to passed node.</param>
+        /// <param name="level">The ancestry level the parent is at regarding passed node.</param>
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The parent at given ancestry level, or null if none found at that level.</returns>
