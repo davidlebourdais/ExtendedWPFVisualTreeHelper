@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.4
+Updated to .NET 10
+
 ## v2.0.3
 Updated to .NET 9
 

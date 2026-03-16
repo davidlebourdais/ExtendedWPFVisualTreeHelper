@@ -8,6 +8,8 @@ Provides methods to travel a WPF visual tree and to find items of interest.
 
 Goes beyond framework's VisualTreeHelper [GetParent](https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.visualtreehelper.getparent) and [GetChild](https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.visualtreehelper.getchild) methods by allowing traversal of [ContentElement](https://docs.microsoft.com/en-us/dotnet/api/system.windows.contentelemen) objects. 
 
+Support policy: LTS .NET Windows targets are the long-term compatibility baseline.
+
 ## Notions
 
  - Use 'FindParent' methods to travel the visual tree up and 'FindChildren' methods to walk it down
