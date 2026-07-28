@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
@@ -21,11 +21,16 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">Optional name or regex that matches name of the child to find.</param>
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <param name="nameMatchMode">Defines how the optional name filter is interpreted.</param>
         /// <returns>A matching child, or default if none existing.</returns>
         /// <remarks>Adapted from https://stackoverflow.com/questions/636383/how-can-i-find-wpf-controls-by-name-or-type. </remarks>
-        public static T FindChild<T>(this DependencyObject node, string name = null, bool allowContentElements = true)
+        public static T? FindChild<T>(
+            this DependencyObject? node,
+            string? name = null,
+            bool allowContentElements = true,
+            NameMatchMode nameMatchMode = NameMatchMode.ExactOrRegex)
         {
-            return WpfVisualFinders.FindChild<T>(node, name, allowContentElements);
+            return WpfVisualFinders.FindChild<T>(node, name, allowContentElements, nameMatchMode);
         }
 
         /// <summary>
@@ -37,10 +42,16 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">Optional name or regex that matches name of the child to find.</param>
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <param name="nameMatchMode">Defines how the optional name filter is interpreted.</param>
         /// <returns>A matching child, or null if none existing.</returns>
-        public static DependencyObject FindChildByType(this DependencyObject node, Type type, string name = null, bool allowContentElements = true)
+        public static DependencyObject? FindChildByType(
+            this DependencyObject? node,
+            Type? type,
+            string? name = null,
+            bool allowContentElements = true,
+            NameMatchMode nameMatchMode = NameMatchMode.ExactOrRegex)
         {
-            return WpfVisualFinders.FindChildByType(node, type, name, allowContentElements);
+            return WpfVisualFinders.FindChildByType(node, type, name, allowContentElements, nameMatchMode);
         }
 
         /// <summary>
@@ -55,12 +66,17 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">Optional name or regex that matches name of the child to find.</param>
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <param name="nameMatchMode">Defines how the optional name filter is interpreted.</param>
         /// <returns>A matching child, or default if none existing in the direct path.</returns>
-        public static T FindDirectChild<T>(this DependencyObject node, string name = null, bool allowContentElements = true)
+        public static T? FindDirectChild<T>(
+            this DependencyObject? node,
+            string? name = null,
+            bool allowContentElements = true,
+            NameMatchMode nameMatchMode = NameMatchMode.ExactOrRegex)
         {
-            return WpfVisualFinders.FindDirectChild<T>(node, name, allowContentElements);
+            return WpfVisualFinders.FindDirectChild<T>(node, name, allowContentElements, nameMatchMode);
         }
-        
+
         /// <summary>
         /// Finds the first occurence of a typed child in the descendancy of a <see cref="DependencyObject"/> node 
         /// with optional name filtering and with the ability to travel through <see cref="ContentElement"/> objects 
@@ -73,10 +89,16 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">Optional name or regex that matches name of the child to find.</param>
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <param name="nameMatchMode">Defines how the optional name filter is interpreted.</param>
         /// <returns>A matching child, or null if none existing in the direct path.</returns>
-        public static DependencyObject FindDirectChildByType(this DependencyObject node, Type type, string name = null, bool allowContentElements = true)
+        public static DependencyObject? FindDirectChildByType(
+            this DependencyObject? node,
+            Type? type,
+            string? name = null,
+            bool allowContentElements = true,
+            NameMatchMode nameMatchMode = NameMatchMode.ExactOrRegex)
         {
-            return WpfVisualFinders.FindDirectChildByType(node, type, name, allowContentElements);
+            return WpfVisualFinders.FindDirectChildByType(node, type, name, allowContentElements, nameMatchMode);
         }
 
         /// <summary>
@@ -88,12 +110,17 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">An optional name or regex pattern to be used for filtering during search.</param>
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <param name="nameMatchMode">Defines how the optional name filter is interpreted.</param>
         /// <returns>All found children elements that match method type.</returns>
         /// <remarks>Inspired from: https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.visualtreehelper 
         /// and https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type. </remarks>
-        public static IEnumerable<T> FindAllChildren<T>(this DependencyObject node, string name = null, bool allowContentElements = true)
+        public static IEnumerable<T> FindAllChildren<T>(
+            this DependencyObject? node,
+            string? name = null,
+            bool allowContentElements = true,
+            NameMatchMode nameMatchMode = NameMatchMode.ExactOrRegex)
         {
-            return WpfVisualFinders.FindAllChildren<T>(node, name, allowContentElements);
+            return WpfVisualFinders.FindAllChildren<T>(node, name, allowContentElements, nameMatchMode);
         }
 
         /// <summary>
@@ -105,10 +132,16 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">An optional name or regex pattern to be used for filtering during search.</param>
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <param name="nameMatchMode">Defines how the optional name filter is interpreted.</param>
         /// <returns>All found children elements that match passed type.</returns>
-        public static IEnumerable<DependencyObject> FindAllChildrenByType(this DependencyObject node, Type type, string name = null, bool allowContentElements = true)
+        public static IEnumerable<DependencyObject> FindAllChildrenByType(
+            this DependencyObject? node,
+            Type? type,
+            string? name = null,
+            bool allowContentElements = true,
+            NameMatchMode nameMatchMode = NameMatchMode.ExactOrRegex)
         {
-            return WpfVisualFinders.FindAllChildrenByType(node, type, name, allowContentElements);
+            return WpfVisualFinders.FindAllChildrenByType(node, type, name, allowContentElements, nameMatchMode);
         }
         #endregion
 
@@ -122,10 +155,15 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">Optional name or regex that matches name of the parent to find.</param>
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <param name="nameMatchMode">Defines how the optional name filter is interpreted.</param>
         /// <returns>The matching parent, or null if none.</returns>
-        public static T FindParent<T>(this DependencyObject node, string name = null, bool allowContentElements = true)
+        public static T? FindParent<T>(
+            this DependencyObject? node,
+            string? name = null,
+            bool allowContentElements = true,
+            NameMatchMode nameMatchMode = NameMatchMode.ExactOrRegex)
         {
-            return WpfVisualFinders.FindParent<T>(node, name, allowContentElements);
+            return WpfVisualFinders.FindParent<T>(node, name, allowContentElements, nameMatchMode);
         }
 
         /// <summary>
@@ -137,10 +175,16 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="name">Optional name or regex that matches name of the parent to find.</param>
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
+        /// <param name="nameMatchMode">Defines how the optional name filter is interpreted.</param>
         /// <returns>The matching parent, or null if none.</returns>
-        public static DependencyObject FindParentByType(this DependencyObject node, Type type, string name = null, bool allowContentElements = true)
+        public static DependencyObject? FindParentByType(
+            this DependencyObject? node,
+            Type? type,
+            string? name = null,
+            bool allowContentElements = true,
+            NameMatchMode nameMatchMode = NameMatchMode.ExactOrRegex)
         {
-             return WpfVisualFinders.FindParentByType(node, type, name, allowContentElements);
+            return WpfVisualFinders.FindParentByType(node, type, name, allowContentElements, nameMatchMode);
         }
 
         /// <summary>
@@ -152,7 +196,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="allowContentElements">Enables or disables the ability to go through <see cref="ContentElement"/> objects,
         /// thus allowing or forbidding logical tree travels for these items.</param>
         /// <returns>The parent at given ancestry level, or null if none found at that level.</returns>
-        public static DependencyObject FindParentByLevel(this DependencyObject node, int level = 1, bool allowContentElements = true)
+        public static DependencyObject? FindParentByLevel(this DependencyObject? node, int level = 1, bool allowContentElements = true)
         {
             return WpfVisualFinders.FindParentByLevel(node, level, allowContentElements);
         }
@@ -164,7 +208,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper
         /// <param name="node">The item to be processed.</param>
         /// <returns>The submitted item's parent, if available, null otherwise.</returns>
         /// <remarks>Adapted from http://www.hardcodet.net/2008/02/find-wpf-parent. </remarks>
-        public static DependencyObject GetParentExtended(this DependencyObject node)
+        public static DependencyObject? GetParentExtended(this DependencyObject? node)
         {
             return WpfVisualFinders.GetParentExtended(node);
         }

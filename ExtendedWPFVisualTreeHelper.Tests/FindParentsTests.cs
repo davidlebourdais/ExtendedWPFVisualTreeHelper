@@ -25,7 +25,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var extMethod = extMethodInfo?.MakeGenericMethod(expected.GetType());
 
                 // Test unnamed:
-                var result = method?.Invoke(null, new object[] { origin, null, allowContentElements });
+                var result = method?.Invoke(null, new object[] { origin, null, allowContentElements, NameMatchMode.ExactOrRegex });
                 if (relatedInPath && (allowContentElements || !hasContentElementInPath))
                 {
                     if (!hasSimilarTypeInPath) // should find destination if not caught a similar type.
@@ -36,22 +36,22 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 else Assert.Null(result);
 
                 // Test extension method with unnamed target:
-                var extensionResult = extMethod?.Invoke(origin, new object[] { origin, null, allowContentElements });
+                var extensionResult = extMethod?.Invoke(origin, new object[] { origin, null, allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Same(result, extensionResult);
 
                 // Test named:
-                var namedResult = method?.Invoke(null, new object[] { origin, "End", allowContentElements });
+                var namedResult = method?.Invoke(null, new object[] { origin, "End", allowContentElements, NameMatchMode.ExactOrRegex });
                 if (relatedInPath && (allowContentElements || !hasContentElementInPath)) // should always find if related in path
                     Assert.Same(expected, namedResult);
                 else Assert.Null(result);
 
                 // Test with regex:
-                var regexResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements });
+                var regexResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Same(namedResult, regexResult);
 
                 // Test extension method with named target and regex:
-                var namedExtensionResult = extMethod?.Invoke(null, new object[] { origin, "End", allowContentElements });
-                var regexExtensionResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements });
+                var namedExtensionResult = extMethod?.Invoke(null, new object[] { origin, "End", allowContentElements, NameMatchMode.ExactOrRegex });
+                var regexExtensionResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Same(namedResult, namedExtensionResult);
                 Assert.Same(namedResult, regexExtensionResult);
             }
@@ -155,7 +155,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 do
                 {
                     var currentNode = parent;
-                    parent =  WpfVisualFinders.GetParentExtended(currentNode);
+                    parent = WpfVisualFinders.GetParentExtended(currentNode);
 
                     var parentExt = currentNode.GetParentExtended();
                     Assert.Equal(parent, parentExt);

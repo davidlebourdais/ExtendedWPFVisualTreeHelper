@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+## v3.0.0
+- Added interface support to runtime type searches.
+- Made child and parent traversal iterative to support deeply nested trees.
+- Added a bounded timeout for regular-expression name filters.
+- Added `NameMatchMode` to make exact and regular-expression filters explicit.
+- Made `GetParentExtended` safe for nonvisual dependency objects.
+- Added nullable API annotations and raised the .NET Framework compatibility floor to 4.6.2.
+- Added multi-target tests, current test dependencies, analyzers and reproducible SDK selection.
+- Added a NuGet package README, Source Link metadata and symbol packages.
+- Improved CI coverage publishing, prerelease versioning and source archives.
+
 ## v2.0.4
 Updated to .NET 10
 

@@ -28,7 +28,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var extMethod = extMethodInfo?.MakeGenericMethod(expected.GetType());
 
                 // Test unnamed:
-                var result = method?.Invoke(null, new object[] { origin, null, allowContentElements });
+                var result = method?.Invoke(null, new object[] { origin, null, allowContentElements, NameMatchMode.ExactOrRegex });
                 if (relatedInPath && (allowContentElements || !hasContentElementInPath))
                 {
                     if (!hasSimilarTypeInPath) // should find destination if not caught a similar type.
@@ -39,22 +39,22 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 else Assert.Null(result);
 
                 // Test extension method with unnamed target:
-                var extensionResult = extMethod?.Invoke(origin, new object[] { origin, null, allowContentElements });
+                var extensionResult = extMethod?.Invoke(origin, new object[] { origin, null, allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Same(result, extensionResult);
 
                 // Test named:
-                var namedResult = method?.Invoke(null, new object[] { origin, "End", allowContentElements });
+                var namedResult = method?.Invoke(null, new object[] { origin, "End", allowContentElements, NameMatchMode.ExactOrRegex });
                 if (relatedInPath && (allowContentElements || !hasContentElementInPath)) // should always find if related in path
                     Assert.Same(expected, namedResult);
                 else Assert.Null(result);
 
                 // Test with regex:
-                var regexResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements });
+                var regexResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Same(namedResult, regexResult);
 
                 // Test extension method with named target and regex:
-                var namedExtensionResult = extMethod?.Invoke(null, new object[] { origin, "End", allowContentElements });
-                var regexExtensionResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements });
+                var namedExtensionResult = extMethod?.Invoke(null, new object[] { origin, "End", allowContentElements, NameMatchMode.ExactOrRegex });
+                var regexExtensionResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Same(namedResult, namedExtensionResult);
                 Assert.Same(namedResult, regexExtensionResult);
             }
@@ -133,30 +133,30 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var extMethod = extMethodInfo?.MakeGenericMethod(expected.GetType());
 
                 // Test unnamed:
-                var result = method?.Invoke(null, new object[] { origin, null, allowContentElements });
+                var result = method?.Invoke(null, new object[] { origin, null, allowContentElements, NameMatchMode.ExactOrRegex });
                 if (hasSimilarTypeInDirectPath && (allowContentElements || !hasContentElementInPath)) // here if caught an intermediary node
-                     Assert.Equal(expected.GetType(), result?.GetType());
+                    Assert.Equal(expected.GetType(), result?.GetType());
                 else if (inDirectPath && (allowContentElements || !hasContentElementInPath)) // should find destination if not caught a similar type.
                     Assert.Same(expected, result);
                 else Assert.Null(result);
 
                 // Test extension method with unnamed target:
-                var extensionResult = extMethod?.Invoke(origin, new object[] { origin, null, allowContentElements });
+                var extensionResult = extMethod?.Invoke(origin, new object[] { origin, null, allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Same(result, extensionResult);
 
                 // Test named:
-                var namedResult = method?.Invoke(null, new object[] { origin, "End", allowContentElements });
+                var namedResult = method?.Invoke(null, new object[] { origin, "End", allowContentElements, NameMatchMode.ExactOrRegex });
                 if (inDirectPath && (allowContentElements || !hasContentElementInPath)) // should always find if related in path
                     Assert.Same(expected, namedResult);
                 else Assert.Null(namedResult);
-                
+
                 // Test with regex:
-                var regexResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements });
+                var regexResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Same(namedResult, regexResult);
 
                 // Test extension method with named target and regex:
-                var namedExtensionResult = extMethod?.Invoke(null, new object[] { origin, "End", allowContentElements });
-                var regexExtensionResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements });
+                var namedExtensionResult = extMethod?.Invoke(null, new object[] { origin, "End", allowContentElements, NameMatchMode.ExactOrRegex });
+                var regexExtensionResult = method?.Invoke(null, new object[] { origin, @"E[a-z]\D{1}", allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Same(namedResult, namedExtensionResult);
                 Assert.Same(namedResult, regexExtensionResult);
             }
@@ -164,7 +164,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
             WpfAppTester.RunTestInWindow(Inspect, xaml);
         }
         #endregion
-        
+
         #region FindDirectChildByType
         [Theory]
         [ClassData(typeof(TestData))]
@@ -183,7 +183,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 // Test unnamed:
                 var result = WpfVisualFinders.FindDirectChildByType(origin, expected.GetType(), allowContentElements: allowContentElements);
                 if (hasSimilarTypeInDirectPath && (allowContentElements || !hasContentElementInPath)) // here if caught an intermediary node
-                     Assert.Equal(expected.GetType(), result?.GetType());
+                    Assert.Equal(expected.GetType(), result?.GetType());
                 else if (inDirectPath && (allowContentElements || !hasContentElementInPath)) // should find destination if not caught a similar type.
                     Assert.Same(expected, result);
                 else Assert.Null(result);
@@ -232,13 +232,13 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var flattenTree = TreeHelpers.FindAllVisualChildren(origin, allowContentElements); // (method is dissimilar to implementation)
                 var targetType = expectedSpecificItem.GetType();
                 var expected = flattenTree.Where(x => x.GetType() == targetType).ToArray();
-                var expectedNamed = expected.Where(x => 
+                var expectedNamed = expected.Where(x =>
                                                        x is FrameworkElement asFe && asFe.Name == "End" ||
                                                        x is FrameworkContentElement asFce && asFce.Name == "End");
 
                 // For this test, target nodes marked as 'siblings' as we may find more than ones with 'End':
-                var expectedRegex = expected.Where(x => 
-                                                       x is FrameworkElement asFe && Regex.IsMatch(asFe.Name, ".*[A-Z]ibling.*") || 
+                var expectedRegex = expected.Where(x =>
+                                                       x is FrameworkElement asFe && Regex.IsMatch(asFe.Name, ".*[A-Z]ibling.*") ||
                                                        x is FrameworkContentElement asFce && Regex.IsMatch(asFce.Name, ".*[A-Z]ibling.*"));
 
                 // Build generic methods manually, since the type to seek might change for each data set:
@@ -248,7 +248,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 var extMethod = extMethodInfo?.MakeGenericMethod(targetType);
 
                 // Test unnamed:
-                var result = method?.Invoke(null, new object[] { origin, null, allowContentElements });
+                var result = method?.Invoke(null, new object[] { origin, null, allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Equal(expected, result);
                 Assert.NotNull(result as IEnumerable<DependencyObject>);
                 if (relatedInPath && (allowContentElements || !hasContentElementInPath))
@@ -256,11 +256,11 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 else Assert.DoesNotContain(expectedSpecificItem, result as IEnumerable<DependencyObject>);
 
                 // Test extension with unnamed targets:
-                var extensionResult = extMethod?.Invoke(origin, new object[] { origin, null, allowContentElements });
+                var extensionResult = extMethod?.Invoke(origin, new object[] { origin, null, allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Equal(result, extensionResult);
 
                 // Test named:
-                result = method.Invoke(null, new object[] { origin, "End", allowContentElements });
+                result = method.Invoke(null, new object[] { origin, "End", allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Equal(expectedNamed, result);
                 Assert.NotNull(result as IEnumerable<DependencyObject>);
                 if (relatedInPath && (allowContentElements || !hasContentElementInPath))
@@ -268,9 +268,9 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                 else Assert.DoesNotContain(expectedSpecificItem, result as IEnumerable<DependencyObject>);
 
                 // Test extension with named targets:
-                extensionResult = extMethod?.Invoke(origin, new object[] { origin, "End", allowContentElements });
+                extensionResult = extMethod?.Invoke(origin, new object[] { origin, "End", allowContentElements, NameMatchMode.ExactOrRegex });
                 Assert.Equal(result, extensionResult);
-                
+
                 // Test regex pattern on similar types named "SimilarSiblings":
                 result = WpfVisualFinders.FindAllChildrenByType(origin, targetType, ".*[A-Z]ibling.*", allowContentElements);
                 Assert.Equal(expectedRegex, result);
@@ -283,7 +283,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
             WpfAppTester.RunTestInWindow(Inspect, xaml);
         }
         #endregion
-        
+
         #region FindAllChildrenByType
         [Theory]
         [ClassData(typeof(TestData))]
@@ -305,7 +305,7 @@ namespace EMA.ExtendedWPFVisualTreeHelper.Tests
                                                        x is FrameworkContentElement asFce && asFce.Name == "End");
 
                 // For this test, target nodes marked as 'siblings' as we may find more than ones with 'End':
-                var expectedRegex = expected.Where(x => 
+                var expectedRegex = expected.Where(x =>
                                                        x is FrameworkElement asFe && Regex.IsMatch(asFe.Name, ".*[A-Z]ibling.*") ||
                                                        x is FrameworkContentElement asFce && Regex.IsMatch(asFce.Name, ".*[A-Z]ibling.*"));
 
