@@ -54,7 +54,7 @@ jobs:
       inputs:
         command: 'test'
         projects: '**/*.Tests/*.csproj'
-        arguments: '--configuration Release --framework net10.0-windows --no-build --collect "XPlat Code Coverage"'
+        arguments: '--configuration Release --framework net10.0-windows --no-build --collect "XPlat Code Coverage" --results-directory "$(Agent.TempDirectory)"'
         publishTestResults: false
 
     - task: PublishCodeCoverageResults@2
